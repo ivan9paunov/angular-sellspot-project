@@ -1,0 +1,26 @@
+<header>
+    <nav>
+        <div class="navigation">
+            <div class="nav-btns group1">
+                <a href="/">HOME</a>
+                <a href="/catalog">FOR SALE</a>
+                <a href="/sold-games">SOLD GAMES</a>
+            </div>
+            <div class="logo-img">
+                <a href="/"><img src="./logo.png" alt="logo"></a>
+            </div>
+            <div class="nav-btns group2">
+                <a href="/support">SELL GAME</a>
+                @if (!isLoggedIn) {
+                    <!-- GUEST -->
+                    <a href="/login">LOGIN</a>
+                    <a href="/register">REGISTER</a>
+                } @else {
+                    <!-- USER -->
+                    <a href="/profile">MY PROFILE</a>
+                    <a href="/logout">LOGOUT</a>
+                }
+            </div>
+        </div>
+    </nav>
+</header>
