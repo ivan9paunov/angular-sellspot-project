@@ -1,0 +1,9 @@
+.main-component {
+    width: 100%;
+    text-align: center;
+    margin: 175px 0 25px 0;
+}
+
+.main-component img {
+    width: 680px;
+}
