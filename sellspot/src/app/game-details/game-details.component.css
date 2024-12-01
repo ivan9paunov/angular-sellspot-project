@@ -1,0 +1,130 @@
+.heading-row {
+    width: 100%;
+    text-align: center;
+    margin: 175px 0 25px 0;
+}
+
+.heading-row h1 {
+    font-size: 40px;
+}
+
+.details-section {
+    width: 100%;
+    margin-bottom: 100px;
+}
+
+.details-container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 12px 12px 12px 24px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0px 0px 45px 20px rgba(43,43,43,1);
+}
+
+.details-img img {
+    width: 400px;
+    height: 500px;
+    display: block;
+}
+
+.details-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 30px;
+    color: black;
+}
+
+h2 {
+    text-transform: uppercase;
+    font-size: 40px;
+    color: black;
+}
+
+.subhead {
+    display: flex;
+    justify-content: space-between;
+}
+
+.helpful-data {
+    color: #555555;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.dynamic-data {
+    color: #2656cf;
+}
+
+.description {
+    text-align: justify;
+    height: 250px;
+    overflow-y: scroll;
+    opacity: 0.5;
+    font-weight: 500;
+}
+
+/* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+.description::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* Hide scrollbar for Firefox */
+.description {
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* Hide scrollbar for IE, Edge */
+.description {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+}
+
+.details-footer {
+    display: flex;
+    gap: 20px;
+}
+
+.condition {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.condition img {
+    width: 40px;
+    cursor: pointer;
+}
+
+.price {
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-grow: 2;
+}
+
+.btns a {
+    width: 120px;
+    background-color: #2656cf;
+    color: white;
+    border-radius: 25px;
+    padding: 10px 0;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.btns a:hover {
+    background-color: #1189f7;
+}

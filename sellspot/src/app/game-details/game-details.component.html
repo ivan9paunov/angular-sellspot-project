@@ -1,0 +1,32 @@
+<main>
+    <section class="heading-row">
+        <h1>GAME DETAILS</h1>
+    </section>
+    <section class="details-section">
+        <div class="details-container">
+            <div class="details-img">
+                <img src={{game.imageUrl}} alt="{{game.title}}'s cover">
+            </div>
+            <div class="details-data">
+                <h2>{{game.title}}</h2>
+                <div class="subhead">
+                    <p class="helpful-data">Genres: <span class="dynamic-data">{{genres}}</span></p>
+                    <p class="helpful-data">Platform: <span class="dynamic-data">{{game.platform}}</span></p>
+                </div>
+                <p class="description">{{game.description}}</p>
+                <p class="helpful-data">Listed on: <span class="dynamic-data">{{date}}</span></p>
+                <div class="details-footer">
+                    <div class="condition">
+                        <img src="/{{game.condition}}.png" alt="{{game.condition}} condition" title="{{game.condition}} condition">
+                        <p class="price">{{game.price}} BGN</p>
+                    </div>
+                    <div class="btns">
+                        <a [routerLink]="['/catalog', game._id, 'edit']">EDIT</a>
+                        <a href="">ARCHIVE</a>
+                        <a href="">DELETE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
