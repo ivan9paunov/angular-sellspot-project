@@ -1,0 +1,38 @@
+<main>
+    <section class="auth-section">
+        <div class="container">
+            <div class="form">
+                <h1>REGISTER</h1>
+                <form>
+                    <div class="form-group">
+                        <input type="text" name="username" id="username" placeholder="Username" autocomplete="off">
+                        <label for="username" hidden>Invalid username format</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" id="email" placeholder="Email address" autocomplete="off">
+                        <label for="email" hidden>Invalid email format</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" id="password" placeholder="Password" autocomplete="off">
+                        <label for="password" hidden>Password must be at least 6 characters</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="repass" id="repass" placeholder="Repeat password"
+                            autocomplete="off">
+                        <label for="repass" hidden>Passwords do not match</label>
+                    </div>
+                    <div class="register-links">
+                        <input type="checkbox" id="terms" name="terms">
+                        <label for="terms">Yes, I agree to the <a href="">Terms of Service</a></label>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn">REGISTER</button>
+                    </div>
+                </form>
+                <div class="helpful-links">
+                    <h4>Already have an account? <a routerLink="/login">Sign In</a></h4>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
