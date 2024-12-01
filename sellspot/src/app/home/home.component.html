@@ -1,0 +1,32 @@
+<main>
+    <section class="heroSection">
+        <div class="welcome-text">
+            <h1>Looking to Buy or Sell PlayStation Games?</h1>
+            <h3>SellSpot is your trusted platform for the best deals and latest titles!</h3>
+        </div>
+    </section>
+
+    <section class="last-three-games">
+        <div class="latest-container">
+            <h2>Latest games</h2>
+            @if (isLoading) {
+            <app-loader />
+            } @else {
+            <div class="latest-games">
+                @for (game of games; track $index) {
+                <div class="latest-game">
+                    <img src={{game.imageUrl}} alt="Game Cover">
+                    <div class="latest-game-info">
+                        <h3>{{game.title}}</h3>
+                        <div class="latest-game-footer">
+                            <p>{{game.price}} BGN</p>
+                            <a [routerLink]="['/catalog', game._id, 'details']">DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </section>
+</main>
