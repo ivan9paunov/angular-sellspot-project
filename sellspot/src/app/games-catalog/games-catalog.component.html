@@ -1,0 +1,81 @@
+<main>
+    <section class="filters-section">
+        <div class="filters">
+            <div class="filters-bar">
+                <p>SORT BY</p>
+                <div class="filter-selectors">
+                    <div class="time-added">
+                        <a href="">ADDED</a>
+                        <div class="quote-balloon time-balloon">
+                            <div class="buttons-container">
+                                <button [class]="{'selected': timeAdded === 'latest'}" (click)="changeByTimeAdded($event)" name="latest">LATEST</button>
+                                <button [class]="{'selected': timeAdded === 'oldest'}" (click)="changeByTimeAdded($event)" name="oldest">OLDEST</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="genre">
+                        <a href="">GENRE</a>
+                        <div class="quote-balloon genre-balloon">
+                            <div class="buttons-container">
+                                <button [class]="{'selected': selectedGenre === 'All'}" (click)="changeGenre($event)" name="All">ALL</button>
+                                <button [class]="{'selected': selectedGenre === 'Action'}" (click)="changeGenre($event)" name="Action">ACTION</button>
+                                <button [class]="{'selected': selectedGenre === 'Adventure'}" (click)="changeGenre($event)" name="Adventure">ADVENTURE</button>
+                                <button [class]="{'selected': selectedGenre === 'Arcade'}" (click)="changeGenre($event)" name="Arcade">ARCADE</button>
+                                <button [class]="{'selected': selectedGenre === 'Brain'}" (click)="changeGenre($event)" name="Brain">BRAIN TRAINING</button>
+                                <button [class]="{'selected': selectedGenre === 'Casual'}" (click)="changeGenre($event)" name="Casual">CASUAL</button>
+                                <button [class]="{'selected': selectedGenre === 'Racing'}" (click)="changeGenre($event)" name="Racing">DRIVING/RACING</button>
+                                <button [class]="{'selected': selectedGenre === 'Educational'}" (click)="changeGenre($event)" name="Educational">EDUCATIONAL</button>
+                                <button [class]="{'selected': selectedGenre === 'Family'}" (click)="changeGenre($event)" name="Family">FAMILY</button>
+                                <button [class]="{'selected': selectedGenre === 'Fighting'}" (click)="changeGenre($event)" name="Fighting">FIGHTING</button>
+                                <button [class]="{'selected': selectedGenre === 'Fitness'}" (click)="changeGenre($event)" name="Fitness">FITNESS</button>
+                                <button [class]="{'selected': selectedGenre === 'Horror'}" (click)="changeGenre($event)" name="Horror">HORROR</button>
+                                <button [class]="{'selected': selectedGenre === 'Music'}" (click)="changeGenre($event)" name="Music">MUSIC/RHYTHM</button>
+                                <button [class]="{'selected': selectedGenre === 'Party'}" (click)="changeGenre($event)" name="Party">PARTY</button>
+                                <button [class]="{'selected': selectedGenre === 'Puzzle'}" (click)="changeGenre($event)" name="Puzzle">PUZZLE</button>
+                                <button [class]="{'selected': selectedGenre === 'Quiz'}" (click)="changeGenre($event)" name="Quiz">QUIZ</button>
+                                <button [class]="{'selected': selectedGenre === 'Role'}" (click)="changeGenre($event)" name="Role">ROLE PLAYING GAMES</button>
+                                <button [class]="{'selected': selectedGenre === 'Shooter'}" (click)="changeGenre($event)" name="Shooter">SHOOTER</button>
+                                <button [class]="{'selected': selectedGenre === 'Simulation'}" (click)="changeGenre($event)" name="Simulation">SIMULATION</button>
+                                <button [class]="{'selected': selectedGenre === 'Simulator'}" (click)="changeGenre($event)" name="Simulator">SIMULATOR</button>
+                                <button [class]="{'selected': selectedGenre === 'Sport'}" (click)="changeGenre($event)" name="Sport">SPORT</button>
+                                <button [class]="{'selected': selectedGenre === 'Strategy'}" (click)="changeGenre($event)" name="Strategy">STRATEGY</button>
+                                <button [class]="{'selected': selectedGenre === 'Unique'}" (click)="changeGenre($event)" name="Unique">UNIQUE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-bar">
+            <form action="GET">
+                <input type="search" placeholder="Search">
+                <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+        </div>
+    </section>
+    <section class="heading-row">
+        <h1>GAMES FOR SALE</h1>
+    </section>
+    @if (isLoading) {
+    <app-loader />
+    } @else {
+    <section class="games-catalog">
+        @for (game of games; track $index) {
+        <div class="card">
+            <div class="card-image">
+                <img src={{game.imageUrl}}
+                    alt="{{game.title}}'s Cover" class="game-image">
+            </div>
+            <div class="card-content">
+                <img src="/{{game.condition}}.png" alt="{{game.condition}} condition" class="condition" title="{{game.condition}} condition">
+                <h2>{{game.title}}</h2>
+            </div>
+            <div class="card-footer">
+                <p>{{game.price}} BGN</p>
+                <a [routerLink]="['/catalog', game._id, 'details']">DETAILS</a>
+            </div>
+        </div>
+        }
+    </section>
+    }
+</main>
