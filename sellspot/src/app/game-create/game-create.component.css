@@ -1,0 +1,175 @@
+.sell-game-section {
+    color: white;
+    position: relative;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1)),
+        url('/secondary-cover.jpg') no-repeat center bottom;
+    background-size: cover;
+    background-blend-mode: darken;
+    z-index: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.form-container {
+    width: 900px;
+    margin-top: 10%;
+    margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(30, 39, 39, 0.3);
+    box-shadow: 0px 10px 120px -10px #99506a;
+    border-radius: 12px;
+}
+
+.form-container>h1 {
+    text-align: center;
+    font-size: 40px;
+    margin: 30px 0;
+    position: relative;
+}
+
+.form-container>h1::after {
+    content: '';
+    display: block;
+    width: 200px;
+    height: 3px;
+    background: #2656cf;
+    border-radius: 3px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 30px 30px 0 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group input {
+    border: none;
+    padding: 10px;
+    margin-top: 12px;
+    background-color: transparent;
+    border-bottom: 2px solid white;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+form .form-group:nth-of-type(1) input {
+    margin-top: 0px;
+}
+
+.form-group::placeholder {
+    color: rgba(211, 211, 211, 0.777);
+}
+
+input:focus {
+    outline: none;
+    border-bottom: 2px solid #1189f7;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.form-group>label.err {
+    font-size: 13px;
+    font-weight: 500;
+    color: red;
+    text-align: center;
+}
+
+#condition {
+    text-align: center;
+    font-family: inherit;
+}
+
+.condition-select {
+    margin-top: 1.725em;
+}
+
+.condition-select label {
+    text-align: center;
+}
+
+.condition-select select {
+    padding: 0.5em;
+}
+
+.right-side {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.genre-checkboxes {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+    gap: 15px;
+}
+
+.genre-col {
+    display: flex;
+    flex-direction: column;
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 5px;
+    font-size: 15px;
+}
+
+textarea::placeholder {
+    font-size: 16px;
+}
+
+form div.register-links {
+    margin-top: 12px;
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    /* outline: 3px solid red; */
+}
+
+.form-btn {
+    align-self: center;
+}
+
+.btn {
+    margin: 30px 0;
+    padding: 8px 12px;
+    outline: none;
+    width: 150px;
+    border-radius: 25px;
+    border-style: none;
+    background-color: #2656cf;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, rgba(153, 80, 106, 1) 0%, rgba(17, 137, 247, 1) 100%);
+}
