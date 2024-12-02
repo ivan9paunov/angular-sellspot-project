@@ -1,53 +1,87 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Game } from '../types/game';
 import { ApiService } from '../api.service';
 import { LoaderComponent } from "../shared/loader/loader.component";
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-games-catalog',
   standalone: true,
-  imports: [RouterLink, LoaderComponent],
+  imports: [RouterLink, LoaderComponent, ReactiveFormsModule],
   templateUrl: './games-catalog.component.html',
   styleUrl: './games-catalog.component.css'
 })
 export class GamesCatalogComponent implements OnInit {
   games: Game[] = [];
   isLoading: boolean = true;
-  timeAdded: string = 'latest';
-  selectedGenre: string = 'All';
+  show: string = 'latest';
+  genre: string = 'All';
+  searchControl: FormControl = new FormControl();
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.show = params['show'] || 'latest';
+      this.genre = params['genre'] || 'All';
+      this.searchControl.setValue(params['search'] || '');
+      this.fetchGames();
+    });
+
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(searchQuery => {
+      this.updateQueryParams();
+    });
+  }
 
   changeByTimeAdded(e: Event) {
+    e.preventDefault();
     const target = e.target as HTMLButtonElement;
-    this.timeAdded = target.name;
-    this.fetchGames();
+    this.show = target.name;
+    this.updateQueryParams();
   }
 
   changeGenre(e: Event) {
     const target = e.target as HTMLButtonElement;
-    this.selectedGenre = target.name;
-    this.fetchGames();
-    // this.apiService.getAllGames(this.timeAdded).subscribe(games => {
-    //   if (this.selectedGenre != 'All') {
-    //     this.games = games;
-    //   } else {
-    //     this.games = games.filter(game => game.genres.includes(this.selectedGenre));
-    //   }
-    //   this.isLoading = false;
-    // });
+    this.genre = target.name;
+    this.updateQueryParams();
   }
 
-  ngOnInit(): void {
-    this.fetchGames();
+  searchGames(e?: Event): void {
+    if (e) {
+      e.preventDefault();
+    }
+    this.updateQueryParams();
   }
 
   fetchGames(): void {
     this.isLoading = true;
-    this.apiService.getAllGames(this.timeAdded, this.selectedGenre).subscribe(games => {
+    this.apiService.getAllGames(this.show, this.genre, this.searchControl.value).subscribe(games => {
       this.games = games;
       this.isLoading = false;
+    }, error => {
+      console.error('Error fetching games:', error);
+      this.isLoading = false;
     });
+  }
+
+  updateQueryParams(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        show: this.show,
+        genre: this.genre,
+        search: this.searchControl.value
+      },
+      queryParamsHandling: 'merge'
+    })
   }
 }

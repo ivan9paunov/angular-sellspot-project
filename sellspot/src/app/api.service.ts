@@ -13,18 +13,26 @@ export class ApiService {
     this.apiUrl = environment.apiUrl;
   }
 
-  getAllGames(timeAdded: string, selectedGenre: string) {
+  getAllGames(timeAdded: string, selectedGenre: string, searchQuery: string) {
     let query = '?';
 
     if (timeAdded === 'latest') {
       query += 'sortBy=_createdOn%20desc';
     }
 
+    let whereClauses = [];
     if (selectedGenre !== 'All') {
-      query += `${query !== '?' ? '&' : ''}where=genres%20LIKE%20%22${selectedGenre}%22`;
+      whereClauses.push(`genres%20LIKE%20%22${selectedGenre}%22`);
+    }
+    if (searchQuery) {
+      whereClauses.push(`title%20LIKE%20%22${encodeURIComponent(searchQuery)}%22`);
     }
 
-    return this.http.get<Game[]>(`${this.apiUrl}/games${query !== '?' ? query : ''}`);
+    if (whereClauses.length) { 
+      query += `${query !== '?' ? '&' : ''}where=${whereClauses.join('%20AND%20')}`; 
+    }
+
+    return this.http.get<Game[]>(`${this.apiUrl}/games${query}`);
   }
 
   getLastThreeGames() {
