@@ -1359,7 +1359,7 @@
                 platform: 'PS4',
                 price: '34.99',
                 condition: 'Average',
-                genres: ['Action', 'Adventure'],
+                genres: 'Action, Adventure',
                 description: 'When a young street hustler, a retired bank robber, and a terrifying psychopath find themselves entangled with some of the most frightening and deranged elements of the criminal underworld, the U.S. government, and the entertainment industry, they must pull off a series of dangerous heists to survive in a ruthless city in which they can trust nobody — least of all each other.',
                 _createdOn: 1732970700590,
                 _id: '600a2267-438e-410f-87b5-d6e3c58ba814'
@@ -1369,9 +1369,9 @@
                 title: 'Call of Duty: Black Ops 6',
                 imageUrl: 'https://gmedia.playstation.com/is/image/SIEPDC/call-of-duty-black-ops-6-wallpaper-mobile-1080x1920-en-22may24?$1600px$',
                 platform: 'PS5',
-                price: '123.45',
+                price: '123.50',
                 condition: 'Excellent',
-                genres: ['Action'],
+                genres: 'Action',
                 description: 'Developed by Treyarch and Raven, Black Ops 6 is a spy action thriller set in the early 90s, a period of transition and upheaval in global politics, characterised by the end of the Cold War and the rise of the United States as a single superpower. With a mind-bending narrative, and unbound by the rules of engagement, this is signature Black Ops across a cinematic single-player Campaign, a best-in-class Multiplayer experience, and with the epic return of Round-Based Zombies. While the Gulf War commands the global spotlight, a shadowy clandestine force has infiltrated the highest levels of the CIA, branding anyone who resists as traitors. Exiled from their agency and country that once hailed them as heroes, Black Ops veteran Frank Woods and his team find themselves hunted by the military machine that created them. Stripped of their titles, connections, weapons, tech, and allies, they are forced to go rogue, partnering with the criminal underworld to stay one step ahead of their own corrupted government. They’ll do whatever it takes to bring down the real traitors and clear their names — even if that means crossing the same lines as their enemies. There is no going back.',
                 _createdOn: 1732974700590,
                 _id: '600a2267-438e-410f-87b5-d6e3c58ba814'
@@ -1383,7 +1383,7 @@
                 platform: 'PS5',
                 price: '22.99',
                 condition: 'Poor',
-                genres: ['Action', 'Adventure', 'Unique'],
+                genres: 'Action, Adventure, Unique',
                 description: 'America, 1899. The end of the wild west era has begun as lawmen hunt down the last remaining outlaw gangs. Those who will not surrender or succumb are killed. After a robbery goes badly wrong in the western town of Blackwater, Arthur Morgan and the Vander Linde gang are forced to flee. With federal agents and the best bounty hunters in the nation massing on their heels, the gang must rob, steal and fight their way across the rugged heartland of America in order to survive. As deepening internal divisions threaten to tear the gang apart, Arthur must make a choice between his own ideals and loyalty to the gang who raised him. From the creators of Grand Theft Auto V and Red Dead Redemption, Red Dead Redemption 2 is a sprawling tale of life in America at the dawn of the modern age.',
                 _createdOn: 1732978700590,
                 _id: '600a2267-438e-410f-87b5-d6e3c58ba814'
@@ -1395,7 +1395,7 @@
                 platform: 'PS5',
                 price: '66.00',
                 condition: 'Good',
-                genres: ['Sport'],
+                genres: 'Sport',
                 description: 'Get your team playing like the world’s best with FC IQ. An overhaul of tactical foundations across the game delivers greater strategic control and more realistic collective movement at the team level, while a new AI model, powered by real-world data, influences player tactics through all-new Player Roles. New additions to Manager and Player Career let you live out the biggest storylines from the real-world game with Live Start Points**; rewrite the stories of past ICONs with today’s teams in Player Career; and for the first time, play an authentic Women’s Career experience, taking control of a club or player from the top five women’s leagues.',
                 _createdOn: 1732989783596,
                 _id: '600a2267-438e-410f-87b5-d6e3c58ba814'

@@ -5,7 +5,7 @@ export type Game = {
     platform: string;
     price: string;
     condition: string;
-    genres: string[];
+    genres: string;
     description: string;
     _createdOn: number;
     _id: string;

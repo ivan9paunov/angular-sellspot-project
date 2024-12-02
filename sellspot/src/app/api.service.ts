@@ -9,12 +9,22 @@ import { Game } from './types/game';
 export class ApiService {
   private apiUrl: string;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     this.apiUrl = environment.apiUrl;
   }
 
-  getAllGames() {
-    return this.http.get<Game[]>(`${this.apiUrl}/games`);
+  getAllGames(timeAdded: string, selectedGenre: string) {
+    let query = '?';
+
+    if (timeAdded === 'latest') {
+      query += 'sortBy=_createdOn%20desc';
+    }
+
+    if (selectedGenre !== 'All') {
+      query += `${query !== '?' ? '&' : ''}where=genres%20LIKE%20%22${selectedGenre}%22`;
+    }
+
+    return this.http.get<Game[]>(`${this.apiUrl}/games${query !== '?' ? query : ''}`);
   }
 
   getLastThreeGames() {

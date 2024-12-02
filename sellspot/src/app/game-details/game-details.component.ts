@@ -23,7 +23,7 @@ export class GameDetailsComponent implements OnInit {
 
     this.apiService.getSingleGame(id).subscribe(game => {
       this.game = game;
-      this.genres = game.genres.join(', ');
+      this.genres = game.genres;
       this.date = formatDate(game._createdOn);
     });
   }
