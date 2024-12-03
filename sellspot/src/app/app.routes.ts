@@ -6,6 +6,7 @@ import { RegisterComponent } from './user/register/register.component';
 import { GamesCatalogComponent } from './games-catalog/games-catalog.component';
 import { GameCreateComponent } from './game-create/game-create.component';
 import { GameDetailsComponent } from './game-details/game-details.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -20,7 +21,7 @@ export const routes: Routes = [
             { path: ':gameId/details', component: GameDetailsComponent },
         ]
     },
-    { path: 'sell-game', component: GameCreateComponent },
+    { path: 'sell-game', component: GameCreateComponent, canActivate: [AuthGuard] },
     { path: '404', component: PageNotFoundComponent },
     { path: '**', redirectTo: '/404' },
 ];
