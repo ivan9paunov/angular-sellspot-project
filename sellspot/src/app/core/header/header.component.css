@@ -51,6 +51,7 @@ header .navigation .nav-btns a {
     text-align: center;
     padding: 6px 12px;
     border-radius: 25px;
+    cursor: pointer;
 }
 
 header nav .navigation .nav-btns a:hover {

@@ -28,8 +28,8 @@ export class ApiService {
       whereClauses.push(`title%20LIKE%20%22${encodeURIComponent(searchQuery)}%22`);
     }
 
-    if (whereClauses.length) { 
-      query += `${query !== '?' ? '&' : ''}where=${whereClauses.join('%20AND%20')}`; 
+    if (whereClauses.length) {
+      query += `${query !== '?' ? '&' : ''}where=${whereClauses.join('%20AND%20')}`;
     }
 
     return this.http.get<Game[]>(`${this.apiUrl}/games${query}`);
@@ -41,5 +41,10 @@ export class ApiService {
 
   getSingleGame(id: string) {
     return this.http.get<Game>(`${this.apiUrl}/games/${id}`);
+  }
+
+  createGame(title: string, imageUrl: string, platform: string, price: string, condition: string, genres: string, description: string) {
+    const payload = { title, imageUrl, platform, price, condition, genres, description }
+    return this.http.post<Game>(`${this.apiUrl}/games`, payload);
   }
 }

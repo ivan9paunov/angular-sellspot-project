@@ -147,3 +147,7 @@ input:focus {
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.input-error {
+    border-bottom: 2px solid red !important;
+}
