@@ -91,7 +91,8 @@ input:focus {
     text-align: center;
 }
 
-.btn {
+.btn,
+.btn-disabled {
     margin: 30px 0;
     padding: 8px 12px;
     outline: none;
@@ -107,6 +108,11 @@ input:focus {
 
 .btn:hover {
     background: linear-gradient(135deg, rgba(153, 80, 106, 1) 0%, rgba(17, 137, 247, 1) 100%);
+}
+
+.btn-disabled {
+    background-color: grey;
+    cursor: none;
 }
 
 .helpful-links h4 {

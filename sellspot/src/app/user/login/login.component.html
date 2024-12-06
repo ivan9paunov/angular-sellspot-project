@@ -3,18 +3,18 @@
         <div class="container">
             <div class="form">
                 <h1>LOGIN</h1>
-                <form #form="ngForm" (ngSubmit)="login(form)">
+                <form [formGroup]="form" (ngSubmit)="login()">
 
                     <div class="form-group">
                         <input
-                            [class]="((inputEmail?.touched && inputEmail?.errors?.['required']) || (inputEmail?.touched && inputEmail?.errors?.['emailValidator'])) ? 'input-error' : ''"
+                            [class]="inputMissing('email') || emailNotValid ? 'input-error' : ''"
                             type="email" name="email" id="email" placeholder="Enter your email address"
-                            autocomplete="off" ngModel #inputEmail="ngModel" required [appEmail]="true">
-                        @if (inputEmail?.touched) {
-                        @if (inputEmail?.errors?.['required']) {
+                            autocomplete="off" formControlName="email" />
+                        @if (form.get('email')?.touched) {
+                        @if (form.get('email')?.errors?.['required']) {
                         <label for="email">Email is required</label>
                         }
-                        @if (inputEmail?.errors?.['emailValidator']) {
+                        @if (form.get('email')?.errors?.['emailValidator']) {
                         <label for="email">Email is not valid</label>
                         }
                         }
@@ -22,14 +22,14 @@
 
                     <div class="form-group">
                         <input
-                            [class]="((inputPassword?.touched && inputPassword?.errors?.['required']) || (inputPassword?.touched && inputPassword?.errors?.['minlength'])) ? 'input-error' : ''"
+                            [class]="inputMissing('password') || isUnderMinLength ? 'input-error' : ''"
                             type="password" name="password" id="password" placeholder="Enter your password"
-                            autocomplete="off" ngModel #inputPassword="ngModel" required minlength="6">
-                        @if (inputPassword?.touched) {
-                        @if (inputPassword?.errors?.['required']) {
+                            autocomplete="off" formControlName="password">
+                        @if (form.get('password')?.touched) {
+                        @if (form.get('password')?.errors?.['required']) {
                         <label for="password">Password is required</label>
                         }
-                        @if (inputPassword?.errors?.['minlength']) {
+                        @if (form.get('password')?.errors?.['minlength']) {
                         <label for="password">Password must be at least 6 characters</label>
                         }
                         }
@@ -39,7 +39,7 @@
                         <a href="">Forgot password?</a>
                     </div>
                     <div class="form-group">
-                        <button class="btn" [disabled]="form.invalid">SIGN IN</button>
+                        <button [class]="form.invalid ? 'btn-disabled' : 'btn'" [disabled]="form.invalid">SIGN IN</button>
                     </div>
                 </form>
                 <div class="helpful-links">
