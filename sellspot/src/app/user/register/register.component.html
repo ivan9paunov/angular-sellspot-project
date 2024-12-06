@@ -3,30 +3,86 @@
         <div class="container">
             <div class="form">
                 <h1>REGISTER</h1>
-                <form>
+                <form [formGroup]="form" (ngSubmit)="register()">
                     <div class="form-group">
-                        <input type="text" name="username" id="username" placeholder="Username" autocomplete="off">
-                        <label for="username" hidden>Invalid username format</label>
+                        <input
+                            [class]="inputMissing('username') || inputNotValid('username', 'usernameValidator') ? 'input-error' : ''"
+                            type="text" name="username" id="username" placeholder="Username" autocomplete="off"
+                            formControlName="username" />
+
+                        @if (form.get('username')?.touched) {
+                        @if (form.get('username')?.errors?.['required']) {
+                        <label for="username">Username is required</label>
+                        }
+                        @if (form.get('username')?.errors?.['minlength']) {
+                        <label for="username">Username must be at least 4 characters</label>
+                        }
+                        @if (form.get('username')?.errors?.['usernameValidator']) {
+                        <label for="username">Invalid username format</label>
+                        }
+                        }
                     </div>
+
                     <div class="form-group">
-                        <input type="email" name="email" id="email" placeholder="Email address" autocomplete="off">
-                        <label for="email" hidden>Invalid email format</label>
+                        <input
+                            [class]="inputMissing('email') || inputNotValid('email', 'emailValidator') ? 'input-error' : ''"
+                            type="email" name="email" id="email" placeholder="Email address" autocomplete="off"
+                            formControlName="email" />
+
+                        @if (form.get('email')?.touched) {
+                        @if (form.get('email')?.errors?.['required']) {
+                        <label for="email">Email is required</label>
+                        }
+                        @if (form.get('email')?.errors?.['emailValidator']) {
+                        <label for="email">Invalid email format</label>
+                        }
+                        }
                     </div>
-                    <div class="form-group">
-                        <input type="password" name="password" id="password" placeholder="Password" autocomplete="off">
-                        <label for="password" hidden>Password must be at least 6 characters</label>
+
+                    <div formGroupName="passGroup">
+                        <div class="form-group">
+                            <input
+                                [class]="passwordMissing('password') || passwordNotValid('password', 'passwordValidator') ? 'input-error' : ''"
+                                type="password" name="password" id="password" placeholder="Password" autocomplete="off"
+                                formControlName="password" />
+
+                            @if (form.get('passGroup')?.get('password')?.touched) {
+                            @if (form.get('passGroup')?.get('password')?.errors?.['required']) {
+                            <label for="password">Password is required</label>
+                            }
+                            @if (form.get('passGroup')?.get('password')?.errors?.['minlength']) {
+                            <label for="password">Password must be at least 6 characters</label>
+                            }
+                            @if (form.get('passGroup')?.get('password')?.errors?.['passwordValidator']) {
+                            <label for="password">Invalid password format</label>
+                            }
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <input
+                                [class]="passwordMissing('repass') || 
+                                    form.get('passGroup')?.errors?.['matchPasswordsValidator'] ? 
+                                    'input-error' : ''"
+                                type="password" name="repass" id="repass" placeholder="Repeat password"
+                                autocomplete="off" formControlName="repass">
+                            @if (form.get('passGroup')?.get('repass')?.touched) {
+                            @if (form.get('passGroup')?.errors?.['matchPasswordsValidator'] ||
+                            form.get('passGroup')?.get('repass')?.errors?.['required']) {
+                            <label for="repass">Passwords do not match</label>
+                            }
+                            }
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <input type="password" name="repass" id="repass" placeholder="Repeat password"
-                            autocomplete="off">
-                        <label for="repass" hidden>Passwords do not match</label>
-                    </div>
+
                     <div class="register-links">
-                        <input type="checkbox" id="terms" name="terms">
+                        <input type="checkbox" id="terms" name="terms" formControlName="terms">
                         <label for="terms">Yes, I agree to the <a href="">Terms of Service</a></label>
                     </div>
+
                     <div class="form-group">
-                        <button class="btn">REGISTER</button>
+                        <button [class]="form.invalid ? 'btn-disabled' : 'btn'" [disabled]="form.invalid">
+                            REGISTER</button>
                     </div>
                 </form>
                 <div class="helpful-links">
