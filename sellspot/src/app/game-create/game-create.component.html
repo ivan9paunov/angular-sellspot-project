@@ -3,31 +3,55 @@
         <div class="container">
             <div class="form-container">
                 <h1>SELL YOUR GAME</h1>
-                <form action="">
+                <form [formGroup]="form" (ngSubmit)="addGame()">
                     <div class="form-main-content">
                         <div class="left-side">
                             <div class="form-group">
-                                <input type="text" name="title" id="title" placeholder="Game title" autocomplete="off" #inputTitle>
-                                <label class="err" for="title" hidden>Invalid title format</label>
+                                <input [class]="inputMissing('title') ? 'input-error' : ''" type="text" name="title"
+                                    id="title" placeholder="Game title" autocomplete="off" formControlName="title" />
+                                @if (form.get('title')?.touched) {
+                                @if (form.get('title')?.errors?.['required']) {
+                                <label class="err" for="title">Title is required</label>
+                                }
+                                }
                             </div>
+
                             <div class="form-group">
-                                <input type="url" name="imageUrl" id="imageUrl" placeholder="Cover photo link"
-                                    autocomplete="off" #inputImage>
-                                <label class="err" for="imageUrl" hidden>Invalid image format</label>
+                                <input [class]="inputMissing('imageUrl') ? 'input-error' : ''" type="url"
+                                    name="imageUrl" id="imageUrl" placeholder="Cover photo link" autocomplete="off"
+                                    formControlName="imageUrl" />
+                                @if (form.get('imageUrl')?.touched) {
+                                @if (form.get('imageUrl')?.errors?.['required']) {
+                                <label class="err" for="imageUrl">Image URL is required</label>
+                                }
+                                }
                             </div>
+
                             <div class="form-group">
-                                <input type="text" name="platform" id="platform" placeholder="Platform /e.g. PS5/"
-                                    autocomplete="off" #inputPlatform>
-                                <label class="err" for="platform" hidden>Invalid platform format</label>
+                                <input [class]="inputMissing('platform') ? 'input-error' : ''" type="text"
+                                    name="platform" id="platform" placeholder="Platform /e.g. PS5/" autocomplete="off"
+                                    formControlName="platform" />
+                                @if (form.get('platform')?.touched) {
+                                @if (form.get('platform')?.errors?.['required']) {
+                                <label class="err" for="platform">Platform is required</label>
+                                }
+                                }
                             </div>
+
                             <div class="form-group">
-                                <input type="number" step="0.01" min="0" max="200" name="price" id="price"
-                                    placeholder="Price /e.g. 59.99/" autocomplete="off" #inputPrice>
-                                <label class="err" for="price" hidden>Invalid price format</label>
+                                <input [class]="inputMissing('price') ? 'input-error' : ''" type="number" step="0.01"
+                                    min="0" max="200" name="price" id="price" placeholder="Price /e.g. 59.99/"
+                                    autocomplete="off" formControlName="price" (blur)="formatPriceControl()" />
+                                @if (form.get('price')?.touched) {
+                                @if (form.get('price')?.errors?.['required']) {
+                                <label class="err" for="price">Price is required</label>
+                                }
+                                }
                             </div>
                             <div class="form-group condition-select">
                                 <label for="condition">Game condition</label>
-                                <select id="condition" name="condition" #inputCondition>
+                                <select [class]="inputMissing('condition') ? 'box-error' : ''" id="condition"
+                                    name="condition" formControlName="condition">
                                     <option value="Excellent">Excellent</option>
                                     <option value="Good">Good</option>
                                     <option value="Average">Average</option>
@@ -37,111 +61,120 @@
                             </div>
                         </div>
                         <div class="right-side">
-                            <div class="genre-checkboxes">
+                            <div class="genre-checkboxes" formArrayName="genres">
                                 <div class="genre-col">
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="action" name="action" [(ngModel)]="selectedGenres.Action">
+                                        <input type="checkbox" id="action" name="action" [formControlName]="0">
                                         <label for="action">Action</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="casual" name="casual" [(ngModel)]="selectedGenres.Casual">
+                                        <input type="checkbox" id="casual" name="casual" [formControlName]="1">
                                         <label for="casual">Casual</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="fighting" name="fighting" [(ngModel)]="selectedGenres.Fighting">
+                                        <input type="checkbox" id="fighting" name="fighting" [formControlName]="2">
                                         <label for="fighting">Fighting</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="party" name="party" [(ngModel)]="selectedGenres.Party">
+                                        <input type="checkbox" id="party" name="party" [formControlName]="3">
                                         <label for="party">Party</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="shooter" name="shooter" [(ngModel)]="selectedGenres.Shooter">
+                                        <input type="checkbox" id="shooter" name="shooter" [formControlName]="4">
                                         <label for="shooter">Shooter</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="strategy" name="strategy" [(ngModel)]="selectedGenres.Strategy">
+                                        <input type="checkbox" id="strategy" name="strategy" [formControlName]="5">
                                         <label for="strategy">Strategy</label>
                                     </div>
                                 </div>
                                 <div class="genre-col">
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="adventure" name="adventure" [(ngModel)]="selectedGenres.Adventure">
+                                        <input type="checkbox" id="adventure" name="adventure" [formControlName]="6">
                                         <label for="adventure">Adventure</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="racing" name="racing" [(ngModel)]="selectedGenres['Driving/Racing']">
+                                        <input type="checkbox" id="racing" name="racing" [formControlName]="7">
                                         <label for="racing">Driving/Racing</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="fitness" name="fitness" [(ngModel)]="selectedGenres.Fitness">
+                                        <input type="checkbox" id="fitness" name="fitness" [formControlName]="8">
                                         <label for="fitness">Fitness</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="puzzle" name="puzzle" [(ngModel)]="selectedGenres.Puzzle">
+                                        <input type="checkbox" id="puzzle" name="puzzle" [formControlName]="9">
                                         <label for="puzzle">Puzzle</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="simulation" name="simulation" [(ngModel)]="selectedGenres.Simulation">
+                                        <input type="checkbox" id="simulation" name="simulation" [formControlName]="10">
                                         <label for="simulation">Simulation</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="unique" name="unique" [(ngModel)]="selectedGenres.Unique">
+                                        <input type="checkbox" id="unique" name="unique" [formControlName]="11">
                                         <label for="unique">Unique</label>
                                     </div>
                                 </div>
                                 <div class="genre-col">
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="arcade" name="arcade" [(ngModel)]="selectedGenres.Arcade">
+                                        <input type="checkbox" id="arcade" name="arcade" [formControlName]="12">
                                         <label for="arcade">Arcade</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="educational" name="educational" [(ngModel)]="selectedGenres.Educational">
+                                        <input type="checkbox" id="educational" name="educational"
+                                            [formControlName]="13">
                                         <label for="educational">Educational</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="horror" name="horror" [(ngModel)]="selectedGenres.Horror">
+                                        <input type="checkbox" id="horror" name="horror" [formControlName]="14">
                                         <label for="horror">Horror</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="quiz" name="quiz" [(ngModel)]="selectedGenres.Quiz">
+                                        <input type="checkbox" id="quiz" name="quiz" [formControlName]="15">
                                         <label for="quiz">Quiz</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="simulator" name="simulator" [(ngModel)]="selectedGenres.Simulator">
+                                        <input type="checkbox" id="simulator" name="simulator" [formControlName]="16">
                                         <label for="simulator">Simulator</label>
                                     </div>
                                 </div>
                                 <div class="genre-col">
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="brain" name="brain" [(ngModel)]="selectedGenres['Brain training']">
+                                        <input type="checkbox" id="brain" name="brain" [formControlName]="17">
                                         <label for="brain">Brain training</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="family" name="family" [(ngModel)]="selectedGenres.Family">
+                                        <input type="checkbox" id="family" name="family" [formControlName]="18">
                                         <label for="family">Family</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="music" name="music" [(ngModel)]="selectedGenres['Music/Rhythm']">
+                                        <input type="checkbox" id="music" name="music" [formControlName]="19">
                                         <label for="music">Music/Rhythm</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="role" name="role" [(ngModel)]="selectedGenres['Role playing games']">
+                                        <input type="checkbox" id="role" name="role" [formControlName]="20">
                                         <label for="role">Role playing games</label>
                                     </div>
                                     <div class="checkbox-wrapper">
-                                        <input type="checkbox" id="sport" name="sport" [(ngModel)]="selectedGenres.Sport">
+                                        <input type="checkbox" id="sport" name="sport" [formControlName]="21">
                                         <label for="sport">Sport</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <textarea name="description" id="description" placeholder="Game description" #inputDescription></textarea>
+                                <textarea [class]="inputMissing('description') ? 'box-error' : ''" name="description"
+                                    id="description" placeholder="Game description"
+                                    formControlName="description"></textarea>
+                                @if (form.get('description')?.touched) {
+                                @if (form.get('description')?.errors?.['required'] || form.get('description')?.errors?.['minlength']) {
+                                <label class="err" for="description">Description must be at least 20 characters</label>
+                                }
+                                }
                             </div>
                         </div>
                     </div>
                     <div class="form-btn">
-                        <button class="btn" (click)="addGame($event, inputTitle.value, inputImage.value, inputPlatform.value, inputPrice.value, inputCondition.value, selectedGenres, inputDescription.value)">SUBMIT GAME FOR SALE</button>
+                        <button [class]="form.invalid ? 'btn-disabled' : 'btn'" [disabled]="form.invalid">SUBMIT GAME
+                            FOR SALE</button>
                     </div>
                 </form>
             </div>

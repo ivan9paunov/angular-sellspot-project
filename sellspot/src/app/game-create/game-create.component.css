@@ -156,7 +156,8 @@ input[type="checkbox"] {
     align-self: center;
 }
 
-.btn {
+.btn,
+.btn-disabled {
     margin: 30px 0;
     padding: 8px 12px;
     outline: none;
@@ -172,4 +173,17 @@ input[type="checkbox"] {
 
 .btn:hover {
     background: linear-gradient(135deg, rgba(153, 80, 106, 1) 0%, rgba(17, 137, 247, 1) 100%);
+}
+
+.btn-disabled {
+    background-color: gray;
+    cursor: none;
+}
+
+.input-error {
+    border-bottom: 2px solid red !important;
+}
+
+.box-error {
+    border: 2px solid red !important;
 }
