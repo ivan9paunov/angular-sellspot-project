@@ -12,7 +12,7 @@ import { emailValidator } from '../../utils/email.validator';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  // constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router) { }
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, emailValidator()]),
@@ -36,9 +36,17 @@ export class LoginComponent {
       return;
     }
 
-    console.log(this.form.value);
-    
-    // this.userService.login();
-    // this.router.navigate(['/home']);
+    const { email, password } = this.form.value;
+    if (!email || !password) {
+      return;
+    }
+
+    this.userService.login(email, password).subscribe({
+      next: (data) => {
+        const token = data.accessToken;
+        localStorage.setItem('X-Authorization', token);
+        this.router.navigate(['/home']);
+      }
+    });
   }
 }

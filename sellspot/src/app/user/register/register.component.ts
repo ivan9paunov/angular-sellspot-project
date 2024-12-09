@@ -15,7 +15,7 @@ import { matchPasswordsValidator } from '../../utils/match-passwords.validator';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  // constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router) { }
 
   form = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.minLength(4), usernameValidator()]),
@@ -65,8 +65,15 @@ export class RegisterComponent {
       return;
     }
 
-    console.log(this.form.value);
-    // this.userService.register();
-    // this.router.navigate(['/home']);
+    const { username, email, passGroup: { password } = {} } = this.form.value;
+    
+    this.userService.register(username!, email!, password!)
+      .subscribe({
+        next: (data) => {
+          const token = data.accessToken;
+          localStorage.setItem('X-Authorization', token);
+          this.router.navigate(['/home']);
+        }
+      });
   }
 }

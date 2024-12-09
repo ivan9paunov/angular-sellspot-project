@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../api.service';
 import { atLeastOneChecked } from '../utils/checkbox.validator';
 import { formatPrice } from '../utils/format-prices.util';
@@ -7,7 +7,7 @@ import { formatPrice } from '../utils/format-prices.util';
 @Component({
   selector: 'app-game-create',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './game-create.component.html',
   styleUrl: './game-create.component.css'
 })

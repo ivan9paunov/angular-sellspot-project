@@ -1,17 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment.development';
 import { Game } from './types/game';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl: string;
 
-  constructor(private http: HttpClient) {
-    this.apiUrl = environment.apiUrl;
-  }
+  constructor(private http: HttpClient) {}
 
   getAllGames(timeAdded: string, selectedGenre: string, searchQuery: string) {
     let query = '?';
@@ -32,19 +28,19 @@ export class ApiService {
       query += `${query !== '?' ? '&' : ''}where=${whereClauses.join('%20AND%20')}`;
     }
 
-    return this.http.get<Game[]>(`${this.apiUrl}/games${query}`);
+    return this.http.get<Game[]>(`/api/data/games${query}`);
   }
 
   getLastThreeGames() {
-    return this.http.get<Game[]>(`${this.apiUrl}/games?sortBy=_createdOn%20desc&pageSize=3`);
+    return this.http.get<Game[]>(`/api/data/games?sortBy=_createdOn%20desc&pageSize=3`);
   }
 
   getSingleGame(id: string) {
-    return this.http.get<Game>(`${this.apiUrl}/games/${id}`);
+    return this.http.get<Game>(`/api/data/games/${id}`);
   }
 
   createGame(title: string, imageUrl: string, platform: string, price: string, condition: string, genres: string, description: string) {
     const payload = { title, imageUrl, platform, price, condition, genres, description }
-    return this.http.post<Game>(`${this.apiUrl}/games`, payload);
+    return this.http.post<Game>(`/api/data/games`, payload);
   }
 }

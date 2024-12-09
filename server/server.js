@@ -1,12 +1,10 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('http'), require('fs'), require('crypto')) :
-        // eslint-disable-next-line no-undef
-        typeof define === 'function' && define.amd ? define(['http', 'fs', 'crypto'], factory) :
-            (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Server = factory(global.http, global.fs, global.crypto));
-}(this, (function (http, fs, crypto) {
-    'use strict';
+    typeof define === 'function' && define.amd ? define(['http', 'fs', 'crypto'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Server = factory(global.http, global.fs, global.crypto));
+}(this, (function (http, fs, crypto) { 'use strict';
 
-    function _interopDefaultLegacy(e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
     var http__default = /*#__PURE__*/_interopDefaultLegacy(http);
     var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
@@ -15,14 +13,14 @@
     class ServiceError extends Error {
         constructor(message = 'Service Error') {
             super(message);
-            this.name = 'ServiceError';
+            this.name = 'ServiceError'; 
         }
     }
 
     class NotFoundError extends ServiceError {
         constructor(message = 'Resource not found') {
             super(message);
-            this.name = 'NotFoundError';
+            this.name = 'NotFoundError'; 
             this.status = 404;
         }
     }
@@ -30,7 +28,7 @@
     class RequestError extends ServiceError {
         constructor(message = 'Request error') {
             super(message);
-            this.name = 'RequestError';
+            this.name = 'RequestError'; 
             this.status = 400;
         }
     }
@@ -38,7 +36,7 @@
     class ConflictError extends ServiceError {
         constructor(message = 'Resource conflict') {
             super(message);
-            this.name = 'ConflictError';
+            this.name = 'ConflictError'; 
             this.status = 409;
         }
     }
@@ -46,7 +44,7 @@
     class AuthorizationError extends ServiceError {
         constructor(message = 'Unauthorized') {
             super(message);
-            this.name = 'AuthorizationError';
+            this.name = 'AuthorizationError'; 
             this.status = 401;
         }
     }
@@ -54,7 +52,7 @@
     class CredentialError extends ServiceError {
         constructor(message = 'Forbidden') {
             super(message);
-            this.name = 'CredentialError';
+            this.name = 'CredentialError'; 
             this.status = 403;
         }
     }
@@ -95,7 +93,7 @@
             // NOTE: the OPTIONS method results in undefined result and also it never processes plugins - keep this in mind
             if (method == 'OPTIONS') {
                 Object.assign(headers, {
-                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
                     'Access-Control-Allow-Credentials': false,
                     'Access-Control-Max-Age': '86400',
                     'Access-Control-Allow-Headers': 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, X-Authorization, X-Admin'
@@ -178,8 +176,15 @@
             .split('&')
             .filter(s => s != '')
             .map(x => x.split('='))
-            .reduce((p, [k, v]) => Object.assign(p, { [k]: decodeURIComponent(v) }), {});
-        const body = await parseBody(req);
+            .reduce((p, [k, v]) => Object.assign(p, { [k]: decodeURIComponent(v.replace(/\+/g, " ")) }), {});
+
+        let body;
+        // If req stream has ended body has been parsed
+        if (req.readableEnded) {
+            body = req.body;
+        } else {
+            body = await parseBody(req);
+        }
 
         return {
             serviceName,
@@ -558,8 +563,8 @@
             if (query.pageSize) {
                 responseData = responseData.slice(0, pageSize);
             }
-
-            if (query.distinct) {
+    		
+    		if (query.distinct) {
                 const props = query.distinct.split(',').filter(p => p != '');
                 responseData = Object.values(responseData.reduce((distinct, c) => {
                     const key = props.map(p => c[p]).join('::');
@@ -751,7 +756,7 @@
         };
     };
 
-    var require$$0 = '<!DOCTYPE html>\r\n<html lang="en">\r\n<head>\r\n    <meta charset="UTF-8">\r\n    <meta http-equiv="X-UA-Compatible" content="IE=edge">\r\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\r\n    <title>SUPS Admin Panel</title>\r\n    <style>\r\n        * {\r\n            padding: 0;\r\n            margin: 0;\r\n        }\r\n\r\n        body {\r\n            padding: 32px;\r\n            font-size: 16px;\r\n        }\r\n\r\n        .layout::after {\r\n            content: \'\';\r\n            clear: both;\r\n            display: table;\r\n        }\r\n\r\n        .col {\r\n            display: block;\r\n            float: left;\r\n        }\r\n\r\n        p {\r\n            padding: 8px 16px;\r\n        }\r\n\r\n        table {\r\n            border-collapse: collapse;\r\n        }\r\n\r\n        caption {\r\n            font-size: 120%;\r\n            text-align: left;\r\n            padding: 4px 8px;\r\n            font-weight: bold;\r\n            background-color: #ddd;\r\n        }\r\n\r\n        table, tr, th, td {\r\n            border: 1px solid #ddd;\r\n        }\r\n\r\n        th, td {\r\n            padding: 4px 8px;\r\n        }\r\n\r\n        ul {\r\n            list-style: none;\r\n        }\r\n\r\n        .collection-list a {\r\n            display: block;\r\n            width: 120px;\r\n            padding: 4px 8px;\r\n            text-decoration: none;\r\n            color: black;\r\n            background-color: #ccc;\r\n        }\r\n        .collection-list a:hover {\r\n            background-color: #ddd;\r\n        }\r\n        .collection-list a:visited {\r\n            color: black;\r\n        }\r\n    </style>\r\n    <script type="module">\nimport { html, render } from \'https://unpkg.com/lit-html@1.3.0?module\';\nimport { until } from \'https://unpkg.com/lit-html@1.3.0/directives/until?module\';\n\nconst api = {\r\n    async get(url) {\r\n        return json(url);\r\n    },\r\n    async post(url, body) {\r\n        return json(url, {\r\n            method: \'POST\',\r\n            headers: { \'Content-Type\': \'application/json\' },\r\n            body: JSON.stringify(body)\r\n        });\r\n    }\r\n};\r\n\r\nasync function json(url, options) {\r\n    return await (await fetch(\'/\' + url, options)).json();\r\n}\r\n\r\nasync function getCollections() {\r\n    return api.get(\'data\');\r\n}\r\n\r\nasync function getRecords(collection) {\r\n    return api.get(\'data/\' + collection);\r\n}\r\n\r\nasync function getThrottling() {\r\n    return api.get(\'util/throttle\');\r\n}\r\n\r\nasync function setThrottling(throttle) {\r\n    return api.post(\'util\', { throttle });\r\n}\n\nasync function collectionList(onSelect) {\r\n    const collections = await getCollections();\r\n\r\n    return html`\r\n    <ul class="collection-list">\r\n        ${collections.map(collectionLi)}\r\n    </ul>`;\r\n\r\n    function collectionLi(name) {\r\n        return html`<li><a href="javascript:void(0)" @click=${(ev) => onSelect(ev, name)}>${name}</a></li>`;\r\n    }\r\n}\n\nasync function recordTable(collectionName) {\r\n    const records = await getRecords(collectionName);\r\n    const layout = getLayout(records);\r\n\r\n    return html`\r\n    <table>\r\n        <caption>${collectionName}</caption>\r\n        <thead>\r\n            <tr>${layout.map(f => html`<th>${f}</th>`)}</tr>\r\n        </thead>\r\n        <tbody>\r\n            ${records.map(r => recordRow(r, layout))}\r\n        </tbody>\r\n    </table>`;\r\n}\r\n\r\nfunction getLayout(records) {\r\n    const result = new Set([\'_id\']);\r\n    records.forEach(r => Object.keys(r).forEach(k => result.add(k)));\r\n\r\n    return [...result.keys()];\r\n}\r\n\r\nfunction recordRow(record, layout) {\r\n    return html`\r\n    <tr>\r\n        ${layout.map(f => html`<td>${JSON.stringify(record[f]) || html`<span>(missing)</span>`}</td>`)}\r\n    </tr>`;\r\n}\n\nasync function throttlePanel(display) {\r\n    const active = await getThrottling();\r\n\r\n    return html`\r\n    <p>\r\n        Request throttling: </span>${active}</span>\r\n        <button @click=${(ev) => set(ev, true)}>Enable</button>\r\n        <button @click=${(ev) => set(ev, false)}>Disable</button>\r\n    </p>`;\r\n\r\n    async function set(ev, state) {\r\n        ev.target.disabled = true;\r\n        await setThrottling(state);\r\n        display();\r\n    }\r\n}\n\n//import page from \'//unpkg.com/page/page.mjs\';\r\n\r\n\r\nfunction start() {\r\n    const main = document.querySelector(\'main\');\r\n    editor(main);\r\n}\r\n\r\nasync function editor(main) {\r\n    let list = html`<div class="col">Loading&hellip;</div>`;\r\n    let viewer = html`<div class="col">\r\n    <p>Select collection to view records</p>\r\n</div>`;\r\n    display();\r\n\r\n    list = html`<div class="col">${await collectionList(onSelect)}</div>`;\r\n    display();\r\n\r\n    async function display() {\r\n        render(html`\r\n        <section class="layout">\r\n            ${until(throttlePanel(display), html`<p>Loading</p>`)}\r\n        </section>\r\n        <section class="layout">\r\n            ${list}\r\n            ${viewer}\r\n        </section>`, main);\r\n    }\r\n\r\n    async function onSelect(ev, name) {\r\n        ev.preventDefault();\r\n        viewer = html`<div class="col">${await recordTable(name)}</div>`;\r\n        display();\r\n    }\r\n}\r\n\r\nstart();\n\n</script>\r\n</head>\r\n<body>\r\n    <main>\r\n        Loading&hellip;\r\n    </main>\r\n</body>\r\n</html>';
+    var require$$0 = "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>SUPS Admin Panel</title>\r\n    <style>\r\n        * {\r\n            padding: 0;\r\n            margin: 0;\r\n        }\r\n\r\n        body {\r\n            padding: 32px;\r\n            font-size: 16px;\r\n        }\r\n\r\n        .layout::after {\r\n            content: '';\r\n            clear: both;\r\n            display: table;\r\n        }\r\n\r\n        .col {\r\n            display: block;\r\n            float: left;\r\n        }\r\n\r\n        p {\r\n            padding: 8px 16px;\r\n        }\r\n\r\n        table {\r\n            border-collapse: collapse;\r\n        }\r\n\r\n        caption {\r\n            font-size: 120%;\r\n            text-align: left;\r\n            padding: 4px 8px;\r\n            font-weight: bold;\r\n            background-color: #ddd;\r\n        }\r\n\r\n        table, tr, th, td {\r\n            border: 1px solid #ddd;\r\n        }\r\n\r\n        th, td {\r\n            padding: 4px 8px;\r\n        }\r\n\r\n        ul {\r\n            list-style: none;\r\n        }\r\n\r\n        .collection-list a {\r\n            display: block;\r\n            width: 120px;\r\n            padding: 4px 8px;\r\n            text-decoration: none;\r\n            color: black;\r\n            background-color: #ccc;\r\n        }\r\n        .collection-list a:hover {\r\n            background-color: #ddd;\r\n        }\r\n        .collection-list a:visited {\r\n            color: black;\r\n        }\r\n    </style>\r\n    <script type=\"module\">\nimport { html, render } from 'https://unpkg.com/lit-html@1.3.0?module';\nimport { until } from 'https://unpkg.com/lit-html@1.3.0/directives/until?module';\n\nconst api = {\r\n    async get(url) {\r\n        return json(url);\r\n    },\r\n    async post(url, body) {\r\n        return json(url, {\r\n            method: 'POST',\r\n            headers: { 'Content-Type': 'application/json' },\r\n            body: JSON.stringify(body)\r\n        });\r\n    }\r\n};\r\n\r\nasync function json(url, options) {\r\n    return await (await fetch('/' + url, options)).json();\r\n}\r\n\r\nasync function getCollections() {\r\n    return api.get('data');\r\n}\r\n\r\nasync function getRecords(collection) {\r\n    return api.get('data/' + collection);\r\n}\r\n\r\nasync function getThrottling() {\r\n    return api.get('util/throttle');\r\n}\r\n\r\nasync function setThrottling(throttle) {\r\n    return api.post('util', { throttle });\r\n}\n\nasync function collectionList(onSelect) {\r\n    const collections = await getCollections();\r\n\r\n    return html`\r\n    <ul class=\"collection-list\">\r\n        ${collections.map(collectionLi)}\r\n    </ul>`;\r\n\r\n    function collectionLi(name) {\r\n        return html`<li><a href=\"javascript:void(0)\" @click=${(ev) => onSelect(ev, name)}>${name}</a></li>`;\r\n    }\r\n}\n\nasync function recordTable(collectionName) {\r\n    const records = await getRecords(collectionName);\r\n    const layout = getLayout(records);\r\n\r\n    return html`\r\n    <table>\r\n        <caption>${collectionName}</caption>\r\n        <thead>\r\n            <tr>${layout.map(f => html`<th>${f}</th>`)}</tr>\r\n        </thead>\r\n        <tbody>\r\n            ${records.map(r => recordRow(r, layout))}\r\n        </tbody>\r\n    </table>`;\r\n}\r\n\r\nfunction getLayout(records) {\r\n    const result = new Set(['_id']);\r\n    records.forEach(r => Object.keys(r).forEach(k => result.add(k)));\r\n\r\n    return [...result.keys()];\r\n}\r\n\r\nfunction recordRow(record, layout) {\r\n    return html`\r\n    <tr>\r\n        ${layout.map(f => html`<td>${JSON.stringify(record[f]) || html`<span>(missing)</span>`}</td>`)}\r\n    </tr>`;\r\n}\n\nasync function throttlePanel(display) {\r\n    const active = await getThrottling();\r\n\r\n    return html`\r\n    <p>\r\n        Request throttling: </span>${active}</span>\r\n        <button @click=${(ev) => set(ev, true)}>Enable</button>\r\n        <button @click=${(ev) => set(ev, false)}>Disable</button>\r\n    </p>`;\r\n\r\n    async function set(ev, state) {\r\n        ev.target.disabled = true;\r\n        await setThrottling(state);\r\n        display();\r\n    }\r\n}\n\n//import page from '//unpkg.com/page/page.mjs';\r\n\r\n\r\nfunction start() {\r\n    const main = document.querySelector('main');\r\n    editor(main);\r\n}\r\n\r\nasync function editor(main) {\r\n    let list = html`<div class=\"col\">Loading&hellip;</div>`;\r\n    let viewer = html`<div class=\"col\">\r\n    <p>Select collection to view records</p>\r\n</div>`;\r\n    display();\r\n\r\n    list = html`<div class=\"col\">${await collectionList(onSelect)}</div>`;\r\n    display();\r\n\r\n    async function display() {\r\n        render(html`\r\n        <section class=\"layout\">\r\n            ${until(throttlePanel(display), html`<p>Loading</p>`)}\r\n        </section>\r\n        <section class=\"layout\">\r\n            ${list}\r\n            ${viewer}\r\n        </section>`, main);\r\n    }\r\n\r\n    async function onSelect(ev, name) {\r\n        ev.preventDefault();\r\n        viewer = html`<div class=\"col\">${await recordTable(name)}</div>`;\r\n        display();\r\n    }\r\n}\r\n\r\nstart();\n\n</script>\r\n</head>\r\n<body>\r\n    <main>\r\n        Loading&hellip;\r\n    </main>\r\n</body>\r\n</html>";
 
     const mode = process.argv[2] == '-dev' ? 'dev' : 'prod';
 
@@ -795,7 +800,7 @@
     }
 
     function onRequest(context, tokens, query, body) {
-        Object.entries(body).forEach(([k, v]) => {
+        Object.entries(body).forEach(([k,v]) => {
             console.log(`${k} ${v ? 'enabled' : 'disabled'}`);
             context.util[k] = v;
         });
@@ -933,7 +938,7 @@
          * @param {Object} data Value to store. Shallow merge will be performed!
          * @return {Object} Updated entry.
          */
-        function merge(collection, id, data) {
+         function merge(collection, id, data) {
             if (!collections.has(collection)) {
                 throw new ReferenceError('Collection does not exist: ' + collection);
             }
@@ -1318,7 +1323,7 @@
 
     var rules = initPlugin$3;
 
-    var identity = 'email';
+    var identity = "email";
     var protectedData = {
         users: {
             '60f0cf0b-34b0-4abd-9769-8c42f830dffc': {
@@ -1401,360 +1406,35 @@
                 _id: '600a2267-438e-410f-87b5-d6e3c58ba814'
             },
         },
-        archived: {
-            'f19d1416-09d8-42f0-8f61-e02d84d9690d': {
-                '_ownerId': '935f0fb7-a6fc-4084-99b0-b084a1ec87f1',
-                'topic': 'img/vandalism.jpg',
-                'title': 'Broken bench',
-                'location': 'The stadium parking area',
-                'description': 'This morning, I noticed that a bench outside the stadium has been vandalized and is broken. The damage makes it unusable and creates an eyesore for the area. This needs to be repaired or replaced to maintain the appearance and functionality of the public space.',
-                'author': 'ivan',
-                'comments': [],
-                'likes': [],
-                '_createdOn': 1723034481243,
-                '_id': 'f19d1416-09d8-42f0-8f61-e02d84d9690d'
-            },
-            '8dd86602-1d25-437e-8ebb-15e8ef6873d9': {
-                '_ownerId': 'c941366a-2b63-4afe-8c02-35fd06c0759a',
-                'topic': 'img/water-leak.jpeg',
-                'title': 'Pipe problem',
-                'location': 'Gallery Hotel',
-                'description': 'I just noticed significant flooding on the road in front of the Gallery Hotel due to an underground pipe problem. This needs urgent attention to prevent further disruption and potential damage.',
-                'author': 'alonso',
-                'comments': [],
-                'likes': [],
-                '_createdOn': 1723034499770,
-                '_id': '8dd86602-1d25-437e-8ebb-15e8ef6873d9'
-            },
-            '6e88853f-c158-42c3-a632-0de3c20f97b2': {
-                '_ownerId': '6c631c55-58e6-4897-9995-8299f5ddc7d4',
-                'topic': 'img/fallen-tree.jpg',
-                'title': 'Big Plane tree has fallen',
-                'location': 'Vasil Petrovich St.',
-                'description': 'This morning, I noticed a large tree has fallen on Vasil Petrovich street. It\'s blocking part of the road, making it difficult for vehicles to pass and posing a safety hazard. This needs to be cleared as soon as possible to ensure safe passage for everyone.',
-                'author': 'chris_wood',
-                'comments': [
-                    {
-                        '_ownerId': '935f0fb7-a6fc-4084-99b0-b084a1ec87f1',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        'comment': 'Is it still there?',
-                        '_createdOn': 1722427261525,
-                        '_id': '25edb8aa-afa4-455e-8c28-0119afa2fbe2',
-                        'author': {
-                            'email': 'ivan@abv.bg',
-                            'username': 'ivan',
-                            '_id': '935f0fb7-a6fc-4084-99b0-b084a1ec87f1'
-                        }
-                    },
-                    {
-                        '_ownerId': '35c62d76-8152-4626-8712-eeb96381bea8',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        'comment': 'Yes, it is!',
-                        '_createdOn': 1722427652470,
-                        '_id': 'a18b7822-68e3-49cd-bb01-7d504a053d5d',
-                        'author': {
-                            'email': 'peter@abv.bg',
-                            'username': 'peter',
-                            '_id': '35c62d76-8152-4626-8712-eeb96381bea8'
-                        }
-                    },
-                    {
-                        '_ownerId': '6c631c55-58e6-4897-9995-8299f5ddc7d4',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        'comment': 'Workers from the municipal enterprise are at the location and are currently cutting the tree. It should be removed within an hour.',
-                        '_createdOn': 1722428022630,
-                        '_id': '2eb3fab9-fd01-47d3-952b-e07bd2536bf5',
-                        'author': {
-                            'email': 'chris_wood@abv.bg',
-                            'username': 'chris_wood',
-                            '_id': '6c631c55-58e6-4897-9995-8299f5ddc7d4'
-                        }
-                    },
-                    {
-                        '_ownerId': '847ec027-f659-4086-8032-5173e2f9c93a',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        'comment': 'It\'s clear now!',
-                        '_createdOn': 1722432902972,
-                        '_id': '2a349371-163a-41ac-a4e1-6e09995efca6',
-                        'author': {
-                            'email': 'george@abv.bg',
-                            'username': 'george',
-                            '_id': '847ec027-f659-4086-8032-5173e2f9c93a'
-                        }
-                    }
-                ],
-                'likes': [
-                    {
-                        '_ownerId': '935f0fb7-a6fc-4084-99b0-b084a1ec87f1',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        '_createdOn': 1722869351414,
-                        '_id': 'ea5ff81f-9826-4e52-ae65-7fc7987a2f68',
-                        'author': {
-                            'email': 'ivan@abv.bg',
-                            'username': 'ivan',
-                            '_id': '935f0fb7-a6fc-4084-99b0-b084a1ec87f1'
-                        }
-                    },
-                    {
-                        '_ownerId': '35c62d76-8152-4626-8712-eeb96381bea8',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        '_createdOn': 1722869420570,
-                        '_id': '95d7314f-642e-4048-aab6-beb3ea5c58f4',
-                        'author': {
-                            'email': 'peter@abv.bg',
-                            'username': 'peter',
-                            '_id': '35c62d76-8152-4626-8712-eeb96381bea8'
-                        }
-                    },
-                    {
-                        '_ownerId': '847ec027-f659-4086-8032-5173e2f9c93a',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        '_createdOn': 1722869437059,
-                        '_id': '6ecf43fa-40d4-4f67-8875-3c7cee107e38',
-                        'author': {
-                            'email': 'george@abv.bg',
-                            'username': 'george',
-                            '_id': '847ec027-f659-4086-8032-5173e2f9c93a'
-                        }
-                    },
-                    {
-                        '_ownerId': '499aa137-1ea7-4b6f-a109-3d9421be8ad7',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        '_createdOn': 1722869459126,
-                        '_id': '4781c0c4-244a-4e82-b120-ba369ca9e786',
-                        'author': {
-                            'email': 'krasa@abv.bg',
-                            'username': 'krasa',
-                            '_id': '499aa137-1ea7-4b6f-a109-3d9421be8ad7'
-                        }
-                    },
-                    {
-                        '_ownerId': 'c941366a-2b63-4afe-8c02-35fd06c0759a',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        '_createdOn': 1722869475145,
-                        '_id': '1f279c72-7f24-427d-95e2-5fdb3d2fa917',
-                        'author': {
-                            'email': 'alonso@abv.bg',
-                            'username': 'alonso',
-                            '_id': 'c941366a-2b63-4afe-8c02-35fd06c0759a'
-                        }
-                    },
-                    {
-                        '_ownerId': '2df999fa-98b0-4b6b-a77e-42b8ec8e087b',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        '_createdOn': 1722869494336,
-                        '_id': '280c64c5-a521-4281-b5c5-7e916854b6f5',
-                        'author': {
-                            'email': 'mata_hari@abv.bg',
-                            'username': 'mata_hari',
-                            '_id': '2df999fa-98b0-4b6b-a77e-42b8ec8e087b'
-                        }
-                    },
-                    {
-                        '_ownerId': 'fd0132c4-c9f9-4916-84ae-8945ac7e869a',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        '_createdOn': 1722869510633,
-                        '_id': '33a81d36-53b9-4f30-bd8a-5b4ab9069399',
-                        'author': {
-                            'email': 'dayana@abv.bg',
-                            'username': 'dayana',
-                            '_id': 'fd0132c4-c9f9-4916-84ae-8945ac7e869a'
-                        }
-                    },
-                    {
-                        '_ownerId': 'e67a5082-f15c-4108-b5e7-3e58cb471ec3',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        '_createdOn': 1722869534618,
-                        '_id': 'd008c3bd-0a1e-4f44-85e4-a17893b1ed01',
-                        'author': {
-                            'email': 'pepa@abv.bg',
-                            'username': 'pepa',
-                            '_id': 'e67a5082-f15c-4108-b5e7-3e58cb471ec3'
-                        }
-                    },
-                    {
-                        '_ownerId': '60c871cf-2195-4cc5-af5a-5cd10e0cdeaf',
-                        'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                        '_createdOn': 1722869554457,
-                        '_id': '7b035547-d92b-4ec4-829a-cd08727124b3',
-                        'author': {
-                            'email': 'tachkata@abv.bg',
-                            'username': 'tachkata',
-                            '_id': '60c871cf-2195-4cc5-af5a-5cd10e0cdeaf'
-                        }
-                    }
-                ],
-                '_createdOn': 1723034524447,
-                '_id': '6e88853f-c158-42c3-a632-0de3c20f97b2'
-            }
-        },
-        comments: {
-            'f47db5e5-b32b-4dae-b615-1afbd6f6edcc': {
-                '_ownerId': '499aa137-1ea7-4b6f-a109-3d9421be8ad7',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                'comment': 'How much longer will we tolerate such savagery? Where is the police?',
-                '_createdOn': 1723039247896,
-                '_id': 'f47db5e5-b32b-4dae-b615-1afbd6f6edcc'
-            },
-            'e5297666-393b-4416-b17c-16eedbf4e52f': {
-                '_ownerId': '935f0fb7-a6fc-4084-99b0-b084a1ec87f1',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                'comment': 'I guess they are hiding somewhere, waiting the time to pass...',
-                '_createdOn': 1723039372594,
-                '_id': 'e5297666-393b-4416-b17c-16eedbf4e52f'
-            },
-            'fe56c3fd-d94b-4b2b-b44f-ae7045fac257': {
-                '_ownerId': 'fd0132c4-c9f9-4916-84ae-8945ac7e869a',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                'comment': 'That\'s why we don\'t deserve anything new... The whole problem starts with the irresponsibility of their parents!',
-                '_createdOn': 1723039579707,
-                '_id': 'fe56c3fd-d94b-4b2b-b44f-ae7045fac257'
-            }
-        },
-        likes: {
-            'ea5ff81f-9826-4e52-ae65-7fc7987a2f68': {
-                '_ownerId': '935f0fb7-a6fc-4084-99b0-b084a1ec87f1',
-                'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                '_createdOn': 1722869351414,
-                '_id': 'ea5ff81f-9826-4e52-ae65-7fc7987a2f68'
-            },
-            '95d7314f-642e-4048-aab6-beb3ea5c58f4': {
-                '_ownerId': '35c62d76-8152-4626-8712-eeb96381bea8',
-                'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                '_createdOn': 1722869420570,
-                '_id': '95d7314f-642e-4048-aab6-beb3ea5c58f4'
-            },
-            '6ecf43fa-40d4-4f67-8875-3c7cee107e38': {
-                '_ownerId': '847ec027-f659-4086-8032-5173e2f9c93a',
-                'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                '_createdOn': 1722869437059,
-                '_id': '6ecf43fa-40d4-4f67-8875-3c7cee107e38'
-            },
-            '4781c0c4-244a-4e82-b120-ba369ca9e786': {
-                '_ownerId': '499aa137-1ea7-4b6f-a109-3d9421be8ad7',
-                'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                '_createdOn': 1722869459126,
-                '_id': '4781c0c4-244a-4e82-b120-ba369ca9e786'
-            },
-            '1f279c72-7f24-427d-95e2-5fdb3d2fa917': {
-                '_ownerId': 'c941366a-2b63-4afe-8c02-35fd06c0759a',
-                'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                '_createdOn': 1722869475145,
-                '_id': '1f279c72-7f24-427d-95e2-5fdb3d2fa917'
-            },
-            '280c64c5-a521-4281-b5c5-7e916854b6f5': {
-                '_ownerId': '2df999fa-98b0-4b6b-a77e-42b8ec8e087b',
-                'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                '_createdOn': 1722869494336,
-                '_id': '280c64c5-a521-4281-b5c5-7e916854b6f5'
-            },
-            '33a81d36-53b9-4f30-bd8a-5b4ab9069399': {
-                '_ownerId': 'fd0132c4-c9f9-4916-84ae-8945ac7e869a',
-                'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                '_createdOn': 1722869510633,
-                '_id': '33a81d36-53b9-4f30-bd8a-5b4ab9069399'
-            },
-            'd008c3bd-0a1e-4f44-85e4-a17893b1ed01': {
-                '_ownerId': 'e67a5082-f15c-4108-b5e7-3e58cb471ec3',
-                'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                '_createdOn': 1722869534618,
-                '_id': 'd008c3bd-0a1e-4f44-85e4-a17893b1ed01'
-            },
-            '7b035547-d92b-4ec4-829a-cd08727124b3': {
-                '_ownerId': '60c871cf-2195-4cc5-af5a-5cd10e0cdeaf',
-                'reportId': 'e55b732a-d181-4ec7-a767-2381349ceb02',
-                '_createdOn': 1722869554457,
-                '_id': '7b035547-d92b-4ec4-829a-cd08727124b3'
-            },
-            'bc3032b5-ebed-4f11-bd2c-ba9cbeb73922': {
-                '_ownerId': '499aa137-1ea7-4b6f-a109-3d9421be8ad7',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                '_createdOn': 1723039417674,
-                '_id': 'bc3032b5-ebed-4f11-bd2c-ba9cbeb73922'
-            },
-            '04361573-e139-45f6-94c7-71df095d6012': {
-                '_ownerId': 'fd0132c4-c9f9-4916-84ae-8945ac7e869a',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                '_createdOn': 1723039440062,
-                '_id': '04361573-e139-45f6-94c7-71df095d6012'
-            },
-            'ec565bc9-8a0e-4839-9a2f-9e75b6de009f': {
-                '_ownerId': 'c941366a-2b63-4afe-8c02-35fd06c0759a',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                '_createdOn': 1723039607893,
-                '_id': 'ec565bc9-8a0e-4839-9a2f-9e75b6de009f'
-            },
-            '7a5ba8ad-6966-4aab-a3ff-8d2bdb4bce4c': {
-                '_ownerId': '6c631c55-58e6-4897-9995-8299f5ddc7d4',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                '_createdOn': 1723039627429,
-                '_id': '7a5ba8ad-6966-4aab-a3ff-8d2bdb4bce4c'
-            },
-            '45b66875-3cfe-497d-8e22-0828253ea4ac': {
-                '_ownerId': 'e67a5082-f15c-4108-b5e7-3e58cb471ec3',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                '_createdOn': 1723039662787,
-                '_id': '45b66875-3cfe-497d-8e22-0828253ea4ac'
-            },
-            '49377fc4-7b56-4ac1-b27f-86cf734491cf': {
-                '_ownerId': '35c62d76-8152-4626-8712-eeb96381bea8',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                '_createdOn': 1723039675226,
-                '_id': '49377fc4-7b56-4ac1-b27f-86cf734491cf'
-            },
-            'b4d69804-51df-48ac-8b95-33494ce0ecce': {
-                '_ownerId': '847ec027-f659-4086-8032-5173e2f9c93a',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                '_createdOn': 1723039693547,
-                '_id': 'b4d69804-51df-48ac-8b95-33494ce0ecce'
-            },
-            'cc3184c8-8a01-4999-9b65-d3c1709b5eb3': {
-                '_ownerId': '60f0cf0b-34b0-4abd-9769-8c42f830dffc',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                '_createdOn': 1723039716668,
-                '_id': 'cc3184c8-8a01-4999-9b65-d3c1709b5eb3'
-            },
-            '449ba645-268d-4cd1-ab8b-8e9e9eb19900': {
-                '_ownerId': '2df999fa-98b0-4b6b-a77e-42b8ec8e087b',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                '_createdOn': 1723039734743,
-                '_id': '449ba645-268d-4cd1-ab8b-8e9e9eb19900'
-            },
-            '1f7bde5e-6faa-4d44-bccb-791c7e007c25': {
-                '_ownerId': '60c871cf-2195-4cc5-af5a-5cd10e0cdeaf',
-                'reportId': '06127261-8272-4726-a757-19acddc02441',
-                '_createdOn': 1723039762377,
-                '_id': '1f7bde5e-6faa-4d44-bccb-791c7e007c25'
-            }
-        }
+        
     };
     var rules$1 = {
-        users: {
-            '.create': false,
-            '.read': [
-                'Owner'
-            ],
-            '.update': false,
-            '.delete': false
-        },
-        members: {
-            '.update': 'isOwner(user, get(\'teams\', data.teamId))',
-            '.delete': 'isOwner(user, get(\'teams\', data.teamId)) || isOwner(user, data)',
-            '*': {
-                teamId: {
-                    '.update': 'newData.teamId = data.teamId'
-                },
-                status: {
-                    '.create': 'newData.status = \'pending\''
-                }
-            }
-        }
+    	users: {
+    		".create": false,
+    		".read": [
+    			"Owner"
+    		],
+    		".update": false,
+    		".delete": false
+    	},
+    	members: {
+    		".update": "isOwner(user, get('teams', data.teamId))",
+    		".delete": "isOwner(user, get('teams', data.teamId)) || isOwner(user, data)",
+    		"*": {
+    			teamId: {
+    				".update": "newData.teamId = data.teamId"
+    			},
+    			status: {
+    				".create": "newData.status = 'pending'"
+    			}
+    		}
+    	}
     };
     var settings = {
-        identity: identity,
-        protectedData: protectedData,
-        seedData: seedData,
-        rules: rules$1
+    	identity: identity,
+    	protectedData: protectedData,
+    	seedData: seedData,
+    	rules: rules$1
     };
 
     const plugins = [
@@ -1767,13 +1447,13 @@
     const server = http__default['default'].createServer(requestHandler(plugins, services));
 
     const port = 3030;
+
     server.listen(port);
+
     console.log(`Server started on port ${port}. You can make requests to http://localhost:${port}/`);
     console.log(`Admin panel located at http://localhost:${port}/admin`);
 
-    var softuniPracticeServer = {
-
-    };
+    var softuniPracticeServer = server;
 
     return softuniPracticeServer;
 
