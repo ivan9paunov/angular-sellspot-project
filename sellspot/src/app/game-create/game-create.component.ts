@@ -3,6 +3,8 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 import { ApiService } from '../api.service';
 import { atLeastOneChecked } from '../utils/checkbox.validator';
 import { formatPrice } from '../utils/format-prices.util';
+import { UserService } from '../user/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-create',
@@ -20,7 +22,11 @@ export class GameCreateComponent {
     'Music/Rhythm', 'Role playing games', 'Sport'
   ];
 
-  constructor(private apiService: ApiService) {
+  constructor(
+    private apiService: ApiService, 
+    private userService: UserService,
+    private router: Router
+  ) {
     this.form = new FormGroup({
       title: new FormControl('', [Validators.required]),
       imageUrl: new FormControl('', [Validators.required]),
@@ -60,13 +66,12 @@ export class GameCreateComponent {
     }
 
     const sortedGenres = selectedGenres.sort((a, b) => a.localeCompare(b));
-    const genres = sortedGenres.join(', ')
+    const genres = sortedGenres.join(', ');
+    const userData = this.userService.userData;
 
-    this.apiService.createGame(title, imageUrl, platform, price, condition, genres, description).subscribe((data) => {
-      console.log(data);
-
+    this.apiService.createGame(title, imageUrl, platform, price, condition, genres, description, userData).subscribe(() => {
+      this.router.navigate(['/catalog']);
     });
-    console.log({ title, imageUrl, platform, price, condition, genres, description });
   }
 
   formatPriceControl() {

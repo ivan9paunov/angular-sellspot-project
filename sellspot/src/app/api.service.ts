@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Game } from './types/game';
+import { UserData } from './types/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllGames(timeAdded: string, selectedGenre: string, searchQuery: string) {
     let query = '?';
@@ -39,8 +40,12 @@ export class ApiService {
     return this.http.get<Game>(`/api/data/games/${id}`);
   }
 
-  createGame(title: string, imageUrl: string, platform: string, price: string, condition: string, genres: string, description: string) {
-    const payload = { title, imageUrl, platform, price, condition, genres, description }
+  createGame(title: string, imageUrl: string, platform: string, price: string, condition: string, genres: string, description: string, user: UserData) {
+    const payload = { title, imageUrl, platform, price, condition, genres, description, user }
     return this.http.post<Game>(`/api/data/games`, payload);
+  }
+
+  editGame() {
+    
   }
 }

@@ -1,3 +1,5 @@
+import { UserData } from "./user";
+
 export type Game = {
     _ownerId: string;
     title: string;
@@ -7,6 +9,7 @@ export type Game = {
     condition: string;
     genres: string;
     description: string;
+    user: UserData;
     _createdOn: number;
     _id: string;
 };
