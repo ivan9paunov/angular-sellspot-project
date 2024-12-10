@@ -7,16 +7,18 @@ import { emailValidator } from '../../utils/email.validator';
 import { passwordValidator } from '../../utils/password.validator';
 import { matchPasswordsValidator } from '../../utils/match-passwords.validator';
 import { ErrorMsgComponent } from "../../core/error-msg/error-msg.component";
+import { TermsModalComponent } from "../../shared/terms-modal/terms-modal.component";
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, ErrorMsgComponent],
+  imports: [RouterLink, ReactiveFormsModule, ErrorMsgComponent, TermsModalComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   errorMsg: string | undefined = '';
+  isModalVisible: boolean = false;
 
   constructor(private userService: UserService, private router: Router) { }
 
@@ -86,5 +88,9 @@ export class RegisterComponent {
           }, 2500);
         }
       });
+  }
+
+  toggleModal() {
+    this.isModalVisible = !this.isModalVisible;
   }
 }

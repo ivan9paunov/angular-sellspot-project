@@ -81,7 +81,11 @@
 
                     <div class="register-links">
                         <input type="checkbox" id="terms" name="terms" formControlName="terms">
-                        <label for="terms">Yes, I agree to the <a href="">Terms of Service</a></label>
+                        <label for="terms">Yes, I agree to the</label>
+                        <a (click)="toggleModal()">Terms of Service</a>
+                        @if (isModalVisible) {
+                            <app-terms-modal (closeModal)="toggleModal()" (confirmAction)="toggleModal()" ></app-terms-modal>
+                        }
                     </div>
 
                     <div class="form-group">
