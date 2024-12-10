@@ -3,16 +3,19 @@ import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../user.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { emailValidator } from '../../utils/email.validator';
+import { ErrorMsgComponent } from "../../core/error-msg/error-msg.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, ErrorMsgComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  constructor(private userService: UserService, private router: Router) { }
+  errorMsg: string | undefined = '';
+
+  constructor(private userService: UserService, private router: Router) {}
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, emailValidator()]),
@@ -36,17 +39,24 @@ export class LoginComponent {
       return;
     }
 
-    const { email, password } = this.form.value;
+    let { email, password } = this.form.value;
     if (!email || !password) {
       return;
     }
+
+    email = email.toLowerCase();
 
     this.userService.login(email, password).subscribe({
       next: (data) => {
         const token = data.accessToken;
         localStorage.setItem('X-Authorization', token);
         this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        this.errorMsg = err.error?.message;
+        
       }
     });
   }
+
 }

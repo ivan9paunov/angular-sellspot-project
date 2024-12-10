@@ -6,15 +6,18 @@ import { usernameValidator } from '../../utils/username.validator';
 import { emailValidator } from '../../utils/email.validator';
 import { passwordValidator } from '../../utils/password.validator';
 import { matchPasswordsValidator } from '../../utils/match-passwords.validator';
+import { ErrorMsgComponent } from "../../core/error-msg/error-msg.component";
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, ErrorMsgComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
+  errorMsg: string | undefined = '';
+
   constructor(private userService: UserService, private router: Router) { }
 
   form = new FormGroup({
@@ -65,14 +68,22 @@ export class RegisterComponent {
       return;
     }
 
-    const { username, email, passGroup: { password } = {} } = this.form.value;
-    
+    let { username, email, passGroup: { password } = {} } = this.form.value;
+    username = username?.toLowerCase();
+    email = email?.toLowerCase();
+
     this.userService.register(username!, email!, password!)
       .subscribe({
         next: (data) => {
           const token = data.accessToken;
           localStorage.setItem('X-Authorization', token);
           this.router.navigate(['/home']);
+        },
+        error: (err) => {
+          this.errorMsg = err.error?.message;
+          setTimeout(() => {
+            this.errorMsg = '';
+          }, 2500);
         }
       });
   }
