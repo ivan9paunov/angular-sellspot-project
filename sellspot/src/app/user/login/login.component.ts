@@ -5,17 +5,19 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { emailValidator } from '../../utils/email.validator';
 import { ErrorMsgComponent } from "../../core/error-msg/error-msg.component";
 import { ResetPasswordModalComponent } from "../../shared/reset-password-modal/reset-password-modal.component";
+import { SuccessModalComponent } from "../../shared/success-modal/success-modal.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, ErrorMsgComponent, ResetPasswordModalComponent],
+  imports: [RouterLink, ReactiveFormsModule, ErrorMsgComponent, ResetPasswordModalComponent, SuccessModalComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
   errorMsg: string | undefined = '';
   showModal: boolean = false;
+  hasSuccess: boolean = false;
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -68,8 +70,11 @@ export class LoginComponent {
   }
 
   onResetPassword() {
-    console.log('You successfully requested password reset!');
-    this.showResetPasswordModal()
+    this.showResetPasswordModal();
+    this.hasSuccess = true;
+    setTimeout(() => {
+      this.hasSuccess = false;
+    }, 2500);
   }
 
 }

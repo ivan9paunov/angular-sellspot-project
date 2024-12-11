@@ -56,6 +56,9 @@
                             (confirmModal)="onBuy()"
                         />
                         }
+                        @if (hasSuccess) {
+                            <app-success-modal message="Your request has been sent. Please keep an eye on your inbox." />
+                        }
                     }
                     }
                 </div>

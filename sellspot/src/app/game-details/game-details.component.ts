@@ -6,11 +6,12 @@ import { UserService } from '../user/user.service';
 import { ConfirmationModalComponent } from "../shared/confirmation-modal/confirmation-modal.component";
 import { BuyModalComponent } from "../shared/buy-modal/buy-modal.component";
 import { ConvertTimePipe } from '../shared/pipes/convert-time.pipe';
+import { SuccessModalComponent } from "../shared/success-modal/success-modal.component";
 
 @Component({
   selector: 'app-game-details',
   standalone: true,
-  imports: [RouterLink, ConfirmationModalComponent, BuyModalComponent, ConvertTimePipe],
+  imports: [RouterLink, ConfirmationModalComponent, BuyModalComponent, ConvertTimePipe, SuccessModalComponent],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css'
 })
@@ -23,6 +24,7 @@ export class GameDetailsComponent implements OnInit {
   showDelete: boolean = false;
   showSold: boolean = false;
   showBuy: boolean = false;
+  hasSuccess: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -79,7 +81,10 @@ export class GameDetailsComponent implements OnInit {
   }
 
   onBuy() {
-    this.showBuy = !this.showBuy;
-    console.log("Success!");
+    this.showBuyModal();
+    this.hasSuccess = true;
+    setTimeout(() => {
+      this.hasSuccess = false;
+    }, 5000);
   }
 }

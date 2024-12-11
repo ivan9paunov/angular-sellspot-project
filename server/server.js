@@ -1440,6 +1440,22 @@
                 _createdOn: 1733875230650,
                 _id: '3caa1ca2-7d7f-46cc-a2f4-6937236ed615'
             },
+            '0a165908-7917-4f9c-b4fb-ebac82b6874c': {
+                _ownerId: '35c62d76-8152-4626-8712-eeb96381bea8',
+                title: 'Spider-Man: Miles Morales',
+                imageUrl: 'https://image.api.playstation.com/vulcan/ap/rnd/202008/1423/cZaoNGoCXpClHpljuPVPSUlw.jpg',
+                platform: 'PS5',
+                price: '29.99',
+                condition: 'Average',
+                genres: 'Action',
+                description: 'In the latest adventure in the Marvel’s Spider-Man universe, teenager Miles Morales is adjusting to his new home while following in the footsteps of his mentor, Peter Parker, as a new Spider-Man.\n\nBut when a fierce power struggle threatens to destroy his new home, the aspiring hero realizes that with great power, there must also come great responsibility. To save all of Marvel’s New York, Miles must take up the mantle of Spider-Man and own it.',
+                user: {
+                    username: 'peter',
+                    email: 'peter@abv.bg'
+                },
+                _createdOn: 1733952957390,
+                _id: '0a165908-7917-4f9c-b4fb-ebac82b6874c'
+            },
         }
 };
 var rules$1 = {

@@ -48,6 +48,9 @@
                             (confirmModal)="onResetPassword()"
                         />
                     }
+                    @if (hasSuccess) {
+                        <app-success-modal message="Check your email for your new password!" />
+                    }
                     <div class="form-group">
                         <button [class]="form.invalid ? 'btn-disabled' : 'btn'" [disabled]="form.invalid">SIGN IN</button>
                     </div>
