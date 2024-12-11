@@ -14,7 +14,7 @@
                     <p class="helpful-data">Platform: <span class="dynamic-data">{{game.platform}}</span></p>
                 </div>
                 <p class="description">{{game.description}}</p>
-                <p class="helpful-data">Listed on: <span class="dynamic-data">{{date}}</span></p>
+                <p class="helpful-data">Listed: <span class="dynamic-data">{{game._createdOn | convertTime}}</span></p>
                 <div class="details-footer">
                     <div class="condition">
                         <img src="/{{game.condition}}.png" alt="{{game.condition}} condition"

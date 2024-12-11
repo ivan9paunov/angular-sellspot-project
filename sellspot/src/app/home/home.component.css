@@ -95,6 +95,7 @@ section.last-three-games .latest-container h2 {
     color: rgb(0, 7, 53);
     text-align: center;
     line-height: 1.2em;
+    max-width: 100%;
 }
 
 .latest-game p {

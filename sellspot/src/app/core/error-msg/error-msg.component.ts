@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ErrorMsgService } from './error-msg.service';
 
 @Component({
@@ -9,13 +9,13 @@ import { ErrorMsgService } from './error-msg.service';
   styleUrl: './error-msg.component.css'
 })
 export class ErrorMsgComponent implements OnInit {
-  errMsg = '';
+  errMsg = signal('');
   
   constructor(private errorMsgService: ErrorMsgService) {}
 
   ngOnInit(): void {
     this.errorMsgService.apiError$.subscribe((err: any) => {
-      this.errMsg = err?.error?.message;
+      this.errMsg.set(err?.error?.message);
     });
   }
 }

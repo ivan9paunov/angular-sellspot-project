@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Game } from '../types/game';
 import { ApiService } from '../api.service';
-import { formatDate } from '../utils/date-convertor';
 import { UserService } from '../user/user.service';
 import { ConfirmationModalComponent } from "../shared/confirmation-modal/confirmation-modal.component";
 import { BuyModalComponent } from "../shared/buy-modal/buy-modal.component";
+import { ConvertTimePipe } from '../shared/pipes/convert-time.pipe';
 
 @Component({
   selector: 'app-game-details',
   standalone: true,
-  imports: [RouterLink, ConfirmationModalComponent, BuyModalComponent],
+  imports: [RouterLink, ConfirmationModalComponent, BuyModalComponent, ConvertTimePipe],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css'
 })
@@ -20,7 +20,6 @@ export class GameDetailsComponent implements OnInit {
   collection: string = 'games';
   soldCollection: string = 'sold';
   genres: string = '';
-  date: string = '';
   showDelete: boolean = false;
   showSold: boolean = false;
   showBuy: boolean = false;
@@ -46,7 +45,6 @@ export class GameDetailsComponent implements OnInit {
     this.apiService.getSingleGame(this.collection, gameId).subscribe(game => {
       this.game = game;
       this.genres = game.genres;
-      this.date = formatDate(game._createdOn);
     });
   }
 

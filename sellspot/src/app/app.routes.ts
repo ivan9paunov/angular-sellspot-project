@@ -31,7 +31,14 @@ export const routes: Routes = [
             { path: ':gameId/details', component: SoldDetailsComponent }
         ]
     },
-    { path: 'sell-game', component: GameCreateComponent, canActivate: [AuthGuard] },
+    { 
+        path: 'sell-game', 
+        loadComponent: () => 
+            import('./game-create/game-create.component').then(
+                (c)=> c.GameCreateComponent
+        ),
+        canActivate: [AuthGuard]
+     },
     { path: '404', component: PageNotFoundComponent },
     { path: '**', redirectTo: '/404' },
 ];

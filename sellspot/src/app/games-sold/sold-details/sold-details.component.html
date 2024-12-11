@@ -16,7 +16,7 @@
                 <p class="description">{{game.description}}</p>
                 <div class="details-footer">
                     <div class="left-side">
-                        <p class="helpful-data">Listed on: <span class="dynamic-data">{{date}}</span></p>
+                        <p class="helpful-data">Listed on: <span class="dynamic-data">{{game._createdOn | date}}</span></p>
                         <div class="condition">
                             <img src="/{{game.condition}}.png" alt="{{game.condition}} condition"
                                 title="{{game.condition}} condition">
