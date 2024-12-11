@@ -15,6 +15,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 })
 export class GamesCatalogComponent implements OnInit {
   games: Game[] = [];
+  collection: string = 'games';
   isLoading: boolean = true;
   show: string = 'latest';
   genre: string = 'All';
@@ -64,7 +65,7 @@ export class GamesCatalogComponent implements OnInit {
 
   fetchGames(): void {
     this.isLoading = true;
-    this.apiService.getAllGames(this.show, this.genre, this.searchControl.value).subscribe(games => {
+    this.apiService.getAllGames(this.show, this.genre, this.searchControl.value, this.collection).subscribe(games => {
       this.games = games;
       this.isLoading = false;
     }, error => {

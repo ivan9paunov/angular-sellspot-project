@@ -4,16 +4,18 @@ import { UserService } from '../user.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { emailValidator } from '../../utils/email.validator';
 import { ErrorMsgComponent } from "../../core/error-msg/error-msg.component";
+import { ResetPasswordModalComponent } from "../../shared/reset-password-modal/reset-password-modal.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, ErrorMsgComponent],
+  imports: [RouterLink, ReactiveFormsModule, ErrorMsgComponent, ResetPasswordModalComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
   errorMsg: string | undefined = '';
+  showModal: boolean = false;
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -54,9 +56,20 @@ export class LoginComponent {
       },
       error: (err) => {
         this.errorMsg = err.error?.message;
-        
+        setTimeout(() => {
+          this.errorMsg = '';
+        }, 2500);
       }
     });
+  }
+
+  showResetPasswordModal() {
+    this.showModal = !this.showModal;
+  }
+
+  onResetPassword() {
+    console.log('You successfully requested password reset!');
+    this.showResetPasswordModal()
   }
 
 }

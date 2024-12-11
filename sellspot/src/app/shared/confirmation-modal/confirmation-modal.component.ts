@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-confirmation-modal',
   standalone: true,
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './confirmation-modal.component.html',
   styleUrl: './confirmation-modal.component.css'
 })

@@ -40,8 +40,14 @@
                     </div>
 
                     <div class="login-links">
-                        <a href="">Forgot password?</a>
+                        <a (click)="showResetPasswordModal()">Forgot password?</a>
                     </div>
+                    @if (showModal) {
+                        <app-reset-password-modal 
+                            (closeModal)="showResetPasswordModal()"
+                            (confirmModal)="onResetPassword()"
+                        />
+                    }
                     <div class="form-group">
                         <button [class]="form.invalid ? 'btn-disabled' : 'btn'" [disabled]="form.invalid">SIGN IN</button>
                     </div>

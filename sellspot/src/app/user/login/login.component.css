@@ -145,6 +145,7 @@ input:focus {
     font-weight: 500;
     text-align: end;
     margin-top: 3px;
+    cursor: pointer;
 }
 
 .login-links>a:hover {

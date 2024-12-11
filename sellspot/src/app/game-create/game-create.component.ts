@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
   styleUrl: './game-create.component.css'
 })
 export class GameCreateComponent {
+  collection: string = 'games';
   form: FormGroup;
   genresList = [
     'Action', 'Casual', 'Fighting', 'Party', 'Shooter', 'Strategy', 'Adventure',
@@ -69,8 +70,9 @@ export class GameCreateComponent {
     const genres = sortedGenres.join(', ');
     const userData = this.userService.userData;
 
-    this.apiService.createGame(title, imageUrl, platform, price, condition, genres, description, userData).subscribe(() => {
-      this.router.navigate(['/catalog']);
+    this.apiService.createGame(title, imageUrl, platform, price, condition, genres, description, userData, this.collection).subscribe(({_id}) => {
+       
+      this.router.navigate(['/catalog', _id, 'details']);
     });
   }
 

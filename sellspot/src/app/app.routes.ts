@@ -8,6 +8,8 @@ import { GameCreateComponent } from './game-create/game-create.component';
 import { GameDetailsComponent } from './game-details/game-details.component';
 import { AuthGuard } from './guards/auth.guard';
 import { GameEditComponent } from './game-edit/game-edit.component';
+import { GamesSoldComponent } from './games-sold/games-sold.component';
+import { SoldDetailsComponent } from './games-sold/sold-details/sold-details.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -21,6 +23,12 @@ export const routes: Routes = [
             { path: '', component: GamesCatalogComponent },
             { path: ':gameId/details', component: GameDetailsComponent },
             { path: ':gameId/edit', component: GameEditComponent },
+        ]
+    },
+    {
+        path: 'sold-games', children: [
+            { path: '', component: GamesSoldComponent },
+            { path: ':gameId/details', component: SoldDetailsComponent }
         ]
     },
     { path: 'sell-game', component: GameCreateComponent, canActivate: [AuthGuard] },

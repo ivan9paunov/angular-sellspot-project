@@ -23,6 +23,7 @@ export class GameEditComponent implements OnInit {
     'Music/Rhythm', 'Role playing games', 'Sport'
   ];
   gameData = {} as Game;
+  collection: string = 'games';
   selectedGenres: string[] = [];
 
   constructor(
@@ -46,9 +47,9 @@ export class GameEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.params['gameId'];
+    const gameId = this.route.snapshot.params['gameId'];
 
-    this.apiService.getSingleGame(id).subscribe(game => {
+    this.apiService.getSingleGame(this.collection, gameId).subscribe(game => {
       this.gameData = game;
       this.selectedGenres = game.genres.split(', ');
 

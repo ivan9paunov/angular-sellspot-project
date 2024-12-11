@@ -10,7 +10,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  getAllGames(timeAdded: string, selectedGenre: string, searchQuery: string) {
+  getAllGames(timeAdded: string, selectedGenre: string, searchQuery: string, collection: string) {
     let query = '?';
 
     if (timeAdded === 'latest') {
@@ -29,20 +29,20 @@ export class ApiService {
       query += `${query !== '?' ? '&' : ''}where=${whereClauses.join('%20AND%20')}`;
     }
 
-    return this.http.get<Game[]>(`/api/data/games${query}`);
+    return this.http.get<Game[]>(`/api/data/${collection}${query}`);
   }
 
   getLastThreeGames() {
     return this.http.get<Game[]>(`/api/data/games?sortBy=_createdOn%20desc&pageSize=3`);
   }
 
-  getSingleGame(gameId: string) {
-    return this.http.get<Game>(`/api/data/games/${gameId}`);
+  getSingleGame(collection: string, gameId: string) {
+    return this.http.get<Game>(`/api/data/${collection}/${gameId}`);
   }
 
-  createGame(title: string, imageUrl: string, platform: string, price: string, condition: string, genres: string, description: string, user: UserData) {
+  createGame(title: string, imageUrl: string, platform: string, price: string, condition: string, genres: string, description: string, user: UserData, collection: string) {
     const payload = { title, imageUrl, platform, price, condition, genres, description, user }
-    return this.http.post<Game>(`/api/data/games`, payload);
+    return this.http.post<Game>(`/api/data/${collection}`, payload);
   }
 
   editGame(gameId: string, title: string, imageUrl: string, platform: string, price: string, condition: string, genres: string, description: string, user: UserData) {
