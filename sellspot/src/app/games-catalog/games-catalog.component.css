@@ -57,7 +57,7 @@
     position: absolute;
     background-color: #404040;
     border-radius: 8px;
-    box-shadow: 0px 0px 20px 5px rgba(43,43,43,1);
+    box-shadow: 0px 0px 20px 5px rgba(43, 43, 43, 1);
     padding: 10px;
     z-index: 1;
     text-align: center;
@@ -215,6 +215,7 @@ input[type='search'] {
     border-radius: 50%;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
     cursor: pointer;
+    z-index: 3;
 }
 
 .card-footer {
@@ -248,4 +249,12 @@ input[type='search'] {
 
 .card-footer a:hover {
     background-color: #1189f7;
+}
+
+.backup-text {
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 48px;
+    font-weight: 600;
 }
