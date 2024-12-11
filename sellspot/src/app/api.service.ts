@@ -53,4 +53,8 @@ export class ApiService {
   deleteGame(gameId: string) {
     return this.http.delete<Game>(`/api/data/games/${gameId}`);
   }
+
+  getUserGames(userId: string) {
+    return this.http.get<Game[]>(`/api/data/games?where=_ownerId%3D%22${userId}%22`);
+  }
 }

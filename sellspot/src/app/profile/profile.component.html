@@ -1,0 +1,32 @@
+<main>
+    <section class="heading-row">
+        <h1>Hello {{username}},</h1>
+        <h2>here are the games you're selling right now</h2>
+    </section>
+    @if (isLoading) {
+    <app-loader />
+    } @else {
+    <section class="games-catalog">
+        @if (games.length > 0) {
+        @for (game of games; track $index) {
+        <div class="card">
+            <div class="card-image">
+                <img src={{game.imageUrl}} alt="{{game.title}}'s Cover" class="game-image">
+            </div>
+            <div class="card-content">
+                <img src="/{{game.condition}}.png" alt="{{game.condition}} condition" class="condition"
+                    title="{{game.condition}} condition">
+                <h2>{{game.title}}</h2>
+            </div>
+            <div class="card-footer">
+                <p>{{game.price}} BGN</p>
+                <a [routerLink]="['/catalog', game._id, 'details']">DETAILS</a>
+            </div>
+        </div>
+        }
+        } @else {
+        <p class="backup-text">No games for sale from you. List one?</p>
+        }
+    </section>
+    }
+</main>

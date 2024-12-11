@@ -1,0 +1,98 @@
+.heading-row {
+    width: 100%;
+    text-align: center;
+    margin: 180px 0 50px 0;
+}
+
+.heading-row h1 {
+    font-size: 40px;
+    text-transform: uppercase;
+}
+.heading-row h2 {
+    font-size: 30px;
+    text-transform: uppercase;
+}
+
+.games-catalog {
+    width: 1050px;
+    margin: 0 auto 75px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 75px;
+}
+
+.card {
+    width: 300px;
+    border-radius: 12px 12px 12px 24px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0px 0px 40px -5px rgb(54, 53, 53);
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.card-image img {
+    width: 100%;
+    height: 400px;
+    display: block;
+}
+
+.card-content {
+    padding: 20px 15px 0 15px;
+    color: #404040;
+    position: relative;
+}
+
+.condition {
+    width: 40px;
+    position: absolute;
+    top: -25px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    z-index: 3;
+}
+
+.card-footer {
+    padding: 15px;
+    color: #404040;
+}
+
+.card-content h2 {
+    font-size: 20px;
+    text-align: center;
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.card-footer p {
+    font-weight: 900;
+}
+
+.card-footer a {
+    color: white;
+    background-color: #2656cf;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 18px;
+    border-radius: 25px;
+}
+
+.card-footer a:hover {
+    background-color: #1189f7;
+}
+
+.backup-text {
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 48px;
+    font-weight: 600;
+}
