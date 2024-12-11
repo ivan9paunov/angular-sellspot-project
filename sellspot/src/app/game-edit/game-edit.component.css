@@ -154,10 +154,13 @@ input[type="checkbox"] {
 
 .form-btn {
     align-self: center;
+    display: flex;
+    gap: 20px;
 }
 
 .btn,
-.btn-disabled {
+.btn-disabled,
+.back-btn {
     margin: 30px 0;
     padding: 8px 12px;
     outline: none;
@@ -178,6 +181,14 @@ input[type="checkbox"] {
 .btn-disabled {
     background-color: gray;
     cursor: none;
+}
+
+.back-btn {
+    background-color: #dd4a7d;
+}
+
+.back-btn:hover {
+    background-color: #ef6797;
 }
 
 .input-error {

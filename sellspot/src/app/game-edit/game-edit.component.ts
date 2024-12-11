@@ -4,7 +4,8 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 import { atLeastOneChecked } from '../utils/checkbox.validator';
 import { ApiService } from '../api.service';
 import { Game } from '../types/game';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'app-game-edit',
@@ -24,7 +25,12 @@ export class GameEditComponent implements OnInit {
   gameData = {} as Game;
   selectedGenres: string[] = [];
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute) {
+  constructor(
+    private apiService: ApiService,
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.form = new FormGroup({
       title: new FormControl('', [Validators.required]),
       imageUrl: new FormControl('', [Validators.required]),
@@ -43,7 +49,6 @@ export class GameEditComponent implements OnInit {
     const id = this.route.snapshot.params['gameId'];
 
     this.apiService.getSingleGame(id).subscribe(game => {
-      console.log(game);
       this.gameData = game;
       this.selectedGenres = game.genres.split(', ');
 
@@ -78,7 +83,7 @@ export class GameEditComponent implements OnInit {
     return (this.form.get('genres') as FormArray).controls;
   }
 
-  addGame() {
+  editGame() {
     if (this.form.invalid) {
       return;
     }
@@ -92,13 +97,18 @@ export class GameEditComponent implements OnInit {
     }
 
     const sortedGenres = selectedGenres.sort((a, b) => a.localeCompare(b));
-    const genres = sortedGenres.join(', ')
+    const genres = sortedGenres.join(', ');
+    const userData = this.userService.userData;
+    const gameId = this.route.snapshot.params['gameId'];
 
-    this.apiService.createGame(title, imageUrl, platform, price, condition, genres, description).subscribe((data) => {
-      console.log(data);
-
+    this.apiService.editGame(gameId, title, imageUrl, platform, price, condition, genres, description, userData).subscribe(() => {
+      this.router.navigate(['/catalog', gameId, 'details']);
     });
-    console.log({ title, imageUrl, platform, price, condition, genres, description });
+  }
+
+  goBackToDetails() {
+    const gameId = this.route.snapshot.params['gameId'];
+    this.router.navigate(['/catalog', gameId, 'details']);
   }
 
   formatPriceControl() {

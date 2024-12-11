@@ -3,7 +3,7 @@
         <div class="container">
             <div class="form-container">
                 <h1>EDIT {{gameData.title}}</h1>
-                <form [formGroup]="form" (ngSubmit)="addGame()">
+                <form [formGroup]="form" (ngSubmit)="editGame()">
                     <div class="form-main-content">
                         <div class="left-side">
                             <div class="form-group">
@@ -192,8 +192,8 @@
                         </div>
                     </div>
                     <div class="form-btn">
-                        <button [class]="form.invalid ? 'btn-disabled' : 'btn'" [disabled]="form.invalid">SUBMIT GAME
-                            FOR SALE</button>
+                        <button class="back-btn" (click)="goBackToDetails()">CANCEL</button>
+                        <button [class]="form.invalid ? 'btn-disabled' : 'btn'" [disabled]="form.invalid">EDIT GAME</button>
                     </div>
                 </form>
             </div>

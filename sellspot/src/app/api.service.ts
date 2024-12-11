@@ -45,7 +45,8 @@ export class ApiService {
     return this.http.post<Game>(`/api/data/games`, payload);
   }
 
-  editGame() {
-    
+  editGame(gameId: string, title: string, imageUrl: string, platform: string, price: string, condition: string, genres: string, description: string, user: UserData) {
+    const payload = { title, imageUrl, platform, price, condition, genres, description, user }
+    return this.http.put<Game>(`/api/data/games/${gameId}`, payload);
   }
 }
