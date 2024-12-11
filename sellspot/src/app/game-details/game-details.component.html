@@ -17,14 +17,30 @@
                 <p class="helpful-data">Listed on: <span class="dynamic-data">{{date}}</span></p>
                 <div class="details-footer">
                     <div class="condition">
-                        <img src="/{{game.condition}}.png" alt="{{game.condition}} condition" title="{{game.condition}} condition">
+                        <img src="/{{game.condition}}.png" alt="{{game.condition}} condition"
+                            title="{{game.condition}} condition">
                         <p class="price">{{game.price}} BGN</p>
                     </div>
                     <div class="btns">
                         <a [routerLink]="['/catalog', game._id, 'edit']">EDIT</a>
-                        <a href="">SOLD</a>
-                        <a href="">DELETE</a>
+                        <a (click)="showSoldModal()">SOLD</a>
+                        <a (click)="showDeleteModal()">DELETE</a>
                     </div>
+                    @if (showSold) {
+                    <app-confirmation-modal 
+                        modalTitle="Confirm sale"
+                        modalBody="mark {{game.title}} as sold"
+                        (closeModal)="showSoldModal()"
+                        (confirmModal)="onSold()"
+                    />
+                    } @else if (showDelete) {
+                    <app-confirmation-modal 
+                        modalTitle="Delete game"
+                        modalBody="delete {{game.title}}" 
+                        (closeModal)="showDeleteModal()"
+                        (confirmModal)="onDelete()" 
+                    />
+                    }
                 </div>
             </div>
         </div>

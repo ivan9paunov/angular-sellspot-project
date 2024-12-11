@@ -36,8 +36,8 @@ export class ApiService {
     return this.http.get<Game[]>(`/api/data/games?sortBy=_createdOn%20desc&pageSize=3`);
   }
 
-  getSingleGame(id: string) {
-    return this.http.get<Game>(`/api/data/games/${id}`);
+  getSingleGame(gameId: string) {
+    return this.http.get<Game>(`/api/data/games/${gameId}`);
   }
 
   createGame(title: string, imageUrl: string, platform: string, price: string, condition: string, genres: string, description: string, user: UserData) {
@@ -48,5 +48,9 @@ export class ApiService {
   editGame(gameId: string, title: string, imageUrl: string, platform: string, price: string, condition: string, genres: string, description: string, user: UserData) {
     const payload = { title, imageUrl, platform, price, condition, genres, description, user }
     return this.http.put<Game>(`/api/data/games/${gameId}`, payload);
+  }
+
+  deleteGame(gameId: string) {
+    return this.http.delete<Game>(`/api/data/games/${gameId}`);
   }
 }
