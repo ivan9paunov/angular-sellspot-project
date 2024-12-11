@@ -1442,7 +1442,7 @@
             },
             '0a165908-7917-4f9c-b4fb-ebac82b6874c': {
                 _ownerId: '35c62d76-8152-4626-8712-eeb96381bea8',
-                title: 'Spider-Man: Miles Morales',
+                title: 'Spider-Man',
                 imageUrl: 'https://image.api.playstation.com/vulcan/ap/rnd/202008/1423/cZaoNGoCXpClHpljuPVPSUlw.jpg',
                 platform: 'PS5',
                 price: '29.99',
