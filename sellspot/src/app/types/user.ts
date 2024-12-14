@@ -1,4 +1,4 @@
-export type User = {
+export interface User {
     username: string;
     email: string;
     password: string;
@@ -6,7 +6,7 @@ export type User = {
     _id: string;
 };
 
-export type UserData = {
+export interface UserData {
     username: string;
     email: string;
 }

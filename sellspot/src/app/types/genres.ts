@@ -1,4 +1,4 @@
-export type Genres = {
+export interface Genres {
     Action: boolean,
     Adventure: boolean,
     Arcade: boolean,

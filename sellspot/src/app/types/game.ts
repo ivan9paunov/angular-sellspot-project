@@ -1,6 +1,6 @@
 import { UserData } from "./user";
 
-export type Game = {
+export interface Game {
     _ownerId: string;
     title: string;
     imageUrl: string;
