@@ -8,13 +8,13 @@
     margin: 0;
   }
   
-  #notfound {
+  #server-error {
     position: relative;
     height: 100vh;
     background: #030005;
   }
   
-  #notfound .notfound {
+  #server-error .server-error {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -23,21 +23,21 @@
             transform: translate(-50%, -50%);
   }
   
-  .notfound {
+  .server-error {
     max-width: 767px;
     width: 100%;
     line-height: 1.4;
     text-align: center;
   }
   
-  .notfound .notfound-404 {
+  .server-error .server-error-500 {
     position: relative;
     height: 180px;
     margin-bottom: 20px;
     z-index: -1;
   }
   
-  .notfound .notfound-404 h1 {
+  .server-error .server-error-500 h1 {
     font-family: 'Montserrat', sans-serif;
     position: absolute;
     left: 50%;
@@ -57,7 +57,7 @@
   }
   
   
-  .notfound .notfound-404 h2 {
+  .server-error .server-error-500 h2 {
     font-family: 'Montserrat', sans-serif;
     position: absolute;
     left: 0;
@@ -72,33 +72,15 @@
     margin: 0;
   }
   
-  .notfound a {
-    font-family: 'Montserrat', sans-serif;
-    display: inline-block;
-    text-transform: uppercase;
-    color: #dd4a7d;
-    text-decoration: none;
-    border: 2px solid;
-    background: transparent;
-    padding: 10px 40px;
-    font-size: 14px;
-    font-weight: 700;
-    -webkit-transition: 0.2s all;
-    transition: 0.2s all;
-  }
-  
-  .notfound a:hover {
-    color: #1189f7;
-  }
   
   @media only screen and (max-width: 767px) {
-      .notfound .notfound-404 h2 {
+      .server-error .server-error-500 h2 {
           font-size: 24px;
       }
   }
   
   @media only screen and (max-width: 480px) {
-    .notfound .notfound-404 h1 {
+    .server-error .server-error-500 h1 {
         font-size: 182px;
     }
   }
