@@ -13,6 +13,7 @@ import { SoldDetailsComponent } from './games-sold/sold-details/sold-details.com
 import { UnauthorizedGuard } from './guards/unauthorized.guard';
 import { UserGuard } from './guards/user.guard';
 import { ProfileComponent } from './profile/profile.component';
+import { ServerErrorComponent } from './server-error/server-error.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -44,6 +45,7 @@ export const routes: Routes = [
     },
     { path: 'profile', component: ProfileComponent, canActivate: [GuestGuard] },
 
+    { path: 'server-error', component: ServerErrorComponent},
     { path: '404', component: PageNotFoundComponent },
     { path: '**', redirectTo: '/404' },
 ];

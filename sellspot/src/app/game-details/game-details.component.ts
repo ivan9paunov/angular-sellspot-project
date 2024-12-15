@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Game } from '../types/game';
 import { ApiService } from '../api.service';
@@ -15,7 +15,7 @@ import { SuccessModalComponent } from "../shared/success-modal/success-modal.com
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css'
 })
-export class GameDetailsComponent implements OnInit {
+export class GameDetailsComponent implements OnInit, OnDestroy {
   game = {} as Game;
   currentUserId: string = '';
   collection: string = 'games';
@@ -25,29 +25,44 @@ export class GameDetailsComponent implements OnInit {
   showSold: boolean = false;
   showBuy: boolean = false;
   hasSuccess: boolean = false;
+  errorMessage: string = '';
+  private buySuccessTimeout: ReturnType<typeof setTimeout> | undefined;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router, 
+    private router: Router,
     private apiService: ApiService,
     private userService: UserService
-  ) {}
+  ) { }
 
   get isLoggedIn(): boolean {
     return this.userService.isLogged;
   }
 
   ngOnInit(): void {
-    this.userService.getProfile().subscribe((data) => {
-      this.currentUserId = data._id;
-    });
+    this.userService.getProfile().subscribe(
+      (data) => {
+        this.currentUserId = data._id;
+      },
+      (error) => {
+        console.error('Error loading user profile', error);
+        this.router.navigate(['/server-error']);
+      }
+    );
 
     const gameId = this.route.snapshot.params['gameId'];
 
-    this.apiService.getSingleGame(this.collection, gameId).subscribe(game => {
-      this.game = game;
-      this.genres = game.genres;
-    });
+    this.apiService.getSingleGame(this.collection, gameId).subscribe(
+      (game) => {
+        this.game = game;
+        this.genres = game.genres;
+      },
+      (error) => {
+        console.error('Error loading game details', error);
+        this.router.navigate(['/server-error']);
+
+      }
+    );
   }
 
   showDeleteModal() {
@@ -57,9 +72,15 @@ export class GameDetailsComponent implements OnInit {
   onDelete() {
     const gameId = this.route.snapshot.params['gameId'];
 
-    this.apiService.deleteGame(gameId).subscribe(() => {
-      this.router.navigate(['/catalog']);
-    });
+    this.apiService.deleteGame(gameId).subscribe(
+      () => {
+        this.router.navigate(['/catalog']);
+      },
+      (error) => {
+        console.error('Error deleting game', error);
+        this.router.navigate(['/server-error']);
+      }
+    );
   }
 
   showSoldModal() {
@@ -69,11 +90,23 @@ export class GameDetailsComponent implements OnInit {
   onSold() {
     const gameId = this.route.snapshot.params['gameId'];
 
-    this.apiService.deleteGame(gameId).subscribe(() => {
-      this.apiService.createGame(this.game.title, this.game.imageUrl, this.game.platform, this.game.price, this.game.condition, this.game.genres, this.game.description, this.game.user, this.soldCollection).subscribe(() => {
-        this.router.navigate(['/sold-games']);
-      });
-    });
+    this.apiService.deleteGame(gameId).subscribe(
+      () => {
+        this.apiService.createGame(this.game.title, this.game.imageUrl, this.game.platform, this.game.price, this.game.condition, this.game.genres, this.game.description, this.game.user, this.soldCollection).subscribe(
+          () => {
+            this.router.navigate(['/sold-games']);
+          },
+          (error) => {
+            console.error('Error creating sold game', error);
+            this.router.navigate(['/server-error']);
+          }
+        );
+      },
+      (error) => {
+        console.error('Error deleting game during sold process', error);
+        this.router.navigate(['/server-error']);
+      }
+    );
   }
 
   showBuyModal() {
@@ -83,8 +116,14 @@ export class GameDetailsComponent implements OnInit {
   onBuy() {
     this.showBuyModal();
     this.hasSuccess = true;
-    setTimeout(() => {
+    this.buySuccessTimeout = setTimeout(() => {
       this.hasSuccess = false;
     }, 5000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.buySuccessTimeout) {
+      clearTimeout(this.buySuccessTimeout);
+    }
   }
 }

@@ -110,6 +110,7 @@
     display: block;
     margin: 2px 0;
     background-color: #2656cf;
+    background-color: #000735;
     color: white;
     border: none;
     cursor: pointer;
@@ -121,11 +122,13 @@
 
 .time-balloon button:hover,
 .genre-balloon button:hover {
+    background-color: #2656cf;
     background-color: #1189f7;
 }
 
 .selected {
     background-color: #000735 !important;
+    background-color: #2656cf !important;
 }
 
 .search-bar {
