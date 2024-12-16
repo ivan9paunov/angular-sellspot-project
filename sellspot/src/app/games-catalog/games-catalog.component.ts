@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Game } from '../types/game';
 import { ApiService } from '../api.service';
 import { LoaderComponent } from "../shared/loader/loader.component";
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-games-catalog',
@@ -13,12 +13,13 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   templateUrl: './games-catalog.component.html',
   styleUrl: './games-catalog.component.css'
 })
-export class GamesCatalogComponent implements OnInit {
+export class GamesCatalogComponent implements OnInit, OnDestroy {
   games: Game[] = [];
   collection: string = 'games';
   isLoading: boolean = true;
   show: string = 'latest';
   genre: string = 'All';
+  private subscriptions: Subscription[] = [];
   searchControl: FormControl = new FormControl();
 
   constructor(
@@ -65,13 +66,18 @@ export class GamesCatalogComponent implements OnInit {
 
   fetchGames(): void {
     this.isLoading = true;
-    this.apiService.getAllGames(this.show, this.genre, this.searchControl.value, this.collection).subscribe(games => {
-      this.games = games;
-      this.isLoading = false;
-    }, error => {
-      console.error('Error fetching games:', error);
-      this.isLoading = false;
-    });
+    const getAllGamesSub = this.apiService.getAllGames(this.show, this.genre, this.searchControl.value, this.collection).subscribe(
+      (games) => {
+        this.games = games;
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error('Error fetching games:', error);
+        this.isLoading = false;
+      }
+    );
+
+    this.subscriptions.push(getAllGamesSub);
   }
 
   updateQueryParams(): void {
@@ -84,5 +90,9 @@ export class GamesCatalogComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     })
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }
