@@ -7,25 +7,29 @@ import { ConfirmationModalComponent } from "../shared/confirmation-modal/confirm
 import { BuyModalComponent } from "../shared/buy-modal/buy-modal.component";
 import { ConvertTimePipe } from '../shared/pipes/convert-time.pipe';
 import { SuccessModalComponent } from "../shared/success-modal/success-modal.component";
+import { LoaderComponent } from "../shared/loader/loader.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-game-details',
   standalone: true,
-  imports: [RouterLink, ConfirmationModalComponent, BuyModalComponent, ConvertTimePipe, SuccessModalComponent],
+  imports: [RouterLink, ConfirmationModalComponent, BuyModalComponent, ConvertTimePipe, SuccessModalComponent, LoaderComponent],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css'
 })
 export class GameDetailsComponent implements OnInit, OnDestroy {
   game = {} as Game;
+  gameId: string = '';
   currentUserId: string = '';
   collection: string = 'games';
   soldCollection: string = 'sold';
   genres: string = '';
+  isLoading: boolean = true;
   showDelete: boolean = false;
   showSold: boolean = false;
   showBuy: boolean = false;
   hasSuccess: boolean = false;
-  errorMessage: string = '';
+  private subscriptions: Subscription[] = [];
   private buySuccessTimeout: ReturnType<typeof setTimeout> | undefined;
 
   constructor(
@@ -43,26 +47,25 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
     this.userService.getProfile().subscribe(
       (data) => {
         this.currentUserId = data._id;
-      },
-      (error) => {
-        console.error('Error loading user profile', error);
-        this.router.navigate(['/server-error']);
       }
     );
 
-    const gameId = this.route.snapshot.params['gameId'];
+    this.gameId = this.route.snapshot.params['gameId'];
 
-    this.apiService.getSingleGame(this.collection, gameId).subscribe(
+    const getSingleGameSub = this.apiService.getSingleGame(this.collection, this.gameId).subscribe(
       (game) => {
         this.game = game;
         this.genres = game.genres;
+        this.isLoading = false;
       },
       (error) => {
         console.error('Error loading game details', error);
         this.router.navigate(['/server-error']);
-
+        this.isLoading = false;
       }
     );
+
+    this.subscriptions.push(getSingleGameSub);
   }
 
   showDeleteModal() {
@@ -70,9 +73,7 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
   }
 
   onDelete() {
-    const gameId = this.route.snapshot.params['gameId'];
-
-    this.apiService.deleteGame(gameId).subscribe(
+    const deleteGameSub = this.apiService.deleteGame(this.gameId).subscribe(
       () => {
         this.router.navigate(['/catalog']);
       },
@@ -81,6 +82,8 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/server-error']);
       }
     );
+
+    this.subscriptions.push(deleteGameSub);
   }
 
   showSoldModal() {
@@ -88,11 +91,9 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSold() {
-    const gameId = this.route.snapshot.params['gameId'];
-
-    this.apiService.deleteGame(gameId).subscribe(
+    const archiveGameSub = this.apiService.deleteGame(this.gameId).subscribe(
       () => {
-        this.apiService.createGame(this.game.title, this.game.imageUrl, this.game.platform, this.game.price, this.game.condition, this.game.genres, this.game.description, this.game.user, this.soldCollection).subscribe(
+        const addGameSub = this.apiService.createGame(this.game.title, this.game.imageUrl, this.game.platform, this.game.price, this.game.condition, this.game.genres, this.game.description, this.game.user, this.soldCollection).subscribe(
           () => {
             this.router.navigate(['/sold-games']);
           },
@@ -101,12 +102,16 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
             this.router.navigate(['/server-error']);
           }
         );
+
+        this.subscriptions.push(addGameSub);
       },
       (error) => {
         console.error('Error deleting game during sold process', error);
         this.router.navigate(['/server-error']);
       }
     );
+
+    this.subscriptions.push(archiveGameSub);
   }
 
   showBuyModal() {
@@ -125,5 +130,7 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
     if (this.buySuccessTimeout) {
       clearTimeout(this.buySuccessTimeout);
     }
+
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }
