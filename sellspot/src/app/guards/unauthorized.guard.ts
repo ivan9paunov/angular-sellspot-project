@@ -10,8 +10,7 @@ export const UnauthorizedGuard: CanActivateFn = (
     const userService = inject(UserService);
     const apiService = inject(ApiService);
     const router = inject(Router);
-    const activeRoute = inject(ActivatedRoute);
-    const gameId = activeRoute.snapshot.params['gameId'];
+    const gameId = route.params['gameId'];
 
     const isLogged = userService.isLogged;
     
