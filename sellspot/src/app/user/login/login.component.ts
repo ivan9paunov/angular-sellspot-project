@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../user.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,6 +6,7 @@ import { emailValidator } from '../../utils/email.validator';
 import { ErrorMsgComponent } from "../../core/error-msg/error-msg.component";
 import { ResetPasswordModalComponent } from "../../shared/reset-password-modal/reset-password-modal.component";
 import { SuccessModalComponent } from "../../shared/success-modal/success-modal.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -14,12 +15,14 @@ import { SuccessModalComponent } from "../../shared/success-modal/success-modal.
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
   errorMsg: string | undefined = '';
   showModal: boolean = false;
   hasSuccess: boolean = false;
+  private subscriptions: Subscription[] = [];
+  private timeoutIds: ReturnType<typeof setTimeout>[] = [];
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router) { }
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, emailValidator()]),
@@ -50,19 +53,28 @@ export class LoginComponent {
 
     email = email.toLowerCase();
 
-    this.userService.login(email, password).subscribe({
+    const loginSub = this.userService.login(email, password).subscribe({
       next: (data) => {
         const token = data.accessToken;
         localStorage.setItem('X-Authorization', token);
         this.router.navigate(['/home']);
       },
       error: (err) => {
-        this.errorMsg = err.error?.message;
-        setTimeout(() => {
-          this.errorMsg = '';
-        }, 2500);
+        if (err.status == 0) {
+          console.error('No response from the server', err);
+          this.router.navigate(['/server-error']);
+        } else {
+          this.errorMsg = err.error?.message;
+          const timeoutId = setTimeout(() => {
+            this.errorMsg = '';
+          }, 2500);
+
+          this.timeoutIds.push(timeoutId);
+        }
       }
     });
+
+    this.subscriptions.push(loginSub);
   }
 
   showResetPasswordModal() {
@@ -72,9 +84,15 @@ export class LoginComponent {
   onResetPassword() {
     this.showResetPasswordModal();
     this.hasSuccess = true;
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       this.hasSuccess = false;
     }, 2500);
+
+    this.timeoutIds.push(timeoutId);
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.timeoutIds.forEach(timeout => clearTimeout(timeout));
+  }
 }

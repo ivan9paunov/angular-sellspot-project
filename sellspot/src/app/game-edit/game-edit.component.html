@@ -3,6 +3,9 @@
         <div class="container">
             <div class="form-container">
                 <h1>EDIT {{gameData.title}}</h1>
+                @if (isLoading) {
+                <app-loader />
+                } @else {
                 <form [formGroup]="form" (ngSubmit)="editGame()">
                     <div class="form-main-content">
                         <div class="left-side">
@@ -193,9 +196,11 @@
                     </div>
                     <div class="form-btn">
                         <button class="back-btn" (click)="goBackToDetails()">CANCEL</button>
-                        <button [class]="form.invalid ? 'btn-disabled' : 'btn'" [disabled]="form.invalid">EDIT GAME</button>
+                        <button [class]="form.invalid ? 'btn-disabled' : 'btn'" [disabled]="form.invalid">EDIT
+                            GAME</button>
                     </div>
                 </form>
+                }
             </div>
         </div>
     </section>

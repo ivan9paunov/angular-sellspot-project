@@ -18,19 +18,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(private apiService: ApiService, private router: Router) { }
-  
+
   ngOnInit(): void {
-    const getLastThreeGamesSub = this.apiService.getLastThreeGames().subscribe(
-      (games) => {
-        this.games = games;
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Error loading recent games', error);
-        this.isLoading = false;
-        this.router.navigate(['/server-error']);
-      }
-    );
+    const getLastThreeGamesSub = this.apiService
+      .getLastThreeGames()
+      .subscribe({
+        next: (games) => {
+          this.games = games;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading recent games', error);
+          this.isLoading = false;
+          this.router.navigate(['/server-error']);
+        }
+      });
 
     this.subscriptions.push(getLastThreeGamesSub);
   }

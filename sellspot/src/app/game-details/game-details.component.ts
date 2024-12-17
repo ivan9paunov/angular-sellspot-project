@@ -52,18 +52,20 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
 
     this.gameId = this.route.snapshot.params['gameId'];
 
-    const getSingleGameSub = this.apiService.getSingleGame(this.collection, this.gameId).subscribe(
-      (game) => {
-        this.game = game;
-        this.genres = game.genres;
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Error loading game details', error);
-        this.router.navigate(['/server-error']);
-        this.isLoading = false;
-      }
-    );
+    const getSingleGameSub = this.apiService
+      .getSingleGame(this.collection, this.gameId)
+      .subscribe({
+        next: (game) => {
+          this.game = game;
+          this.genres = game.genres;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading game details', error);
+          this.router.navigate(['/server-error']);
+          this.isLoading = false;
+        }
+      });
 
     this.subscriptions.push(getSingleGameSub);
   }
@@ -73,15 +75,17 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
   }
 
   onDelete() {
-    const deleteGameSub = this.apiService.deleteGame(this.gameId).subscribe(
-      () => {
-        this.router.navigate(['/catalog']);
-      },
-      (error) => {
-        console.error('Error deleting game', error);
-        this.router.navigate(['/server-error']);
-      }
-    );
+    const deleteGameSub = this.apiService
+      .deleteGame(this.gameId)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/catalog']);
+        },
+        error: (error) => {
+          console.error('Error deleting game', error);
+          this.router.navigate(['/server-error']);
+        }
+      });
 
     this.subscriptions.push(deleteGameSub);
   }
@@ -91,25 +95,29 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSold() {
-    const archiveGameSub = this.apiService.deleteGame(this.gameId).subscribe(
-      () => {
-        const addGameSub = this.apiService.createGame(this.game.title, this.game.imageUrl, this.game.platform, this.game.price, this.game.condition, this.game.genres, this.game.description, this.game.user, this.soldCollection).subscribe(
-          () => {
-            this.router.navigate(['/sold-games']);
-          },
-          (error) => {
-            console.error('Error creating sold game', error);
-            this.router.navigate(['/server-error']);
-          }
-        );
+    const archiveGameSub = this.apiService
+      .deleteGame(this.gameId)
+      .subscribe({
+        next: () => {
+          const addGameSub = this.apiService
+            .createGame(this.game.title, this.game.imageUrl, this.game.platform, this.game.price, this.game.condition, this.game.genres, this.game.description, this.game.user, this.soldCollection)
+            .subscribe({
+              next: () => {
+                this.router.navigate(['/sold-games']);
+              },
+              error: (error) => {
+                console.error('Error creating sold game', error);
+                this.router.navigate(['/server-error']);
+              }
+            });
 
-        this.subscriptions.push(addGameSub);
-      },
-      (error) => {
-        console.error('Error deleting game during sold process', error);
-        this.router.navigate(['/server-error']);
-      }
-    );
+          this.subscriptions.push(addGameSub);
+        },
+        error: (error) => {
+          console.error('Error deleting game during sold process', error);
+          this.router.navigate(['/server-error']);
+        }
+      });
 
     this.subscriptions.push(archiveGameSub);
   }

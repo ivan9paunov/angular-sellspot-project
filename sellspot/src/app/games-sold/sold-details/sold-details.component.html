@@ -2,6 +2,9 @@
     <section class="heading-row">
         <h1>GAME DETAILS</h1>
     </section>
+    @if (isLoading) {
+    <app-loader />
+    } @else {
     <section class="details-section">
         <div class="details-container">
             <div class="details-img">
@@ -16,7 +19,8 @@
                 <p class="description">{{game.description}}</p>
                 <div class="details-footer">
                     <div class="left-side">
-                        <p class="helpful-data">Listed on: <span class="dynamic-data">{{game._createdOn | date}}</span></p>
+                        <p class="helpful-data">Listed on: <span class="dynamic-data">{{game._createdOn | date}}</span>
+                        </p>
                         <div class="condition">
                             <img src="/{{game.condition}}.png" alt="{{game.condition}} condition"
                                 title="{{game.condition}} condition">
@@ -33,4 +37,5 @@
             </div>
         </div>
     </section>
+    }
 </main>

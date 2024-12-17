@@ -109,7 +109,7 @@
 .genre-balloon button {
     display: block;
     margin: 2px 0;
-    background-color: #2656cf;
+    background-color: #000735;
     color: white;
     border: none;
     cursor: pointer;
@@ -125,7 +125,7 @@
 }
 
 .selected {
-    background-color: #000735 !important;
+    background-color: #2656cf !important;
 }
 
 .search-bar {

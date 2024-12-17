@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../api.service';
 import { atLeastOneChecked } from '../utils/checkbox.validator';
 import { formatPrice } from '../utils/format-prices.util';
 import { UserService } from '../user/user.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-game-create',
@@ -13,7 +14,8 @@ import { Router } from '@angular/router';
   templateUrl: './game-create.component.html',
   styleUrl: './game-create.component.css'
 })
-export class GameCreateComponent {
+export class GameCreateComponent implements OnDestroy {
+  private subscriptions: Subscription[] = [];
   collection: string = 'games';
   form: FormGroup;
   genresList = [
@@ -24,7 +26,7 @@ export class GameCreateComponent {
   ];
 
   constructor(
-    private apiService: ApiService, 
+    private apiService: ApiService,
     private userService: UserService,
     private router: Router
   ) {
@@ -70,10 +72,19 @@ export class GameCreateComponent {
     const genres = sortedGenres.join(', ');
     const userData = this.userService.userData;
 
-    this.apiService.createGame(title, imageUrl, platform, price, condition, genres, description, userData, this.collection).subscribe(({_id}) => {
-       
-      this.router.navigate(['/catalog', _id, 'details']);
-    });
+    const createGameSub = this.apiService
+      .createGame(title, imageUrl, platform, price, condition, genres, description, userData, this.collection)
+      .subscribe({
+        next: ({ _id }) => {
+          this.router.navigate(['/catalog', _id, 'details']);
+        },
+        error: (error) => {
+          console.error('Error creating game', error);
+          this.router.navigate(['/server-error']);
+        }
+      });
+
+    this.subscriptions.push(createGameSub);
   }
 
   formatPriceControl() {
@@ -84,5 +95,9 @@ export class GameCreateComponent {
     if (formattedValue) {
       priceControl?.setValue(formattedValue);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

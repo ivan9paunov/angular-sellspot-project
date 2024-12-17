@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../user.service';
@@ -8,6 +8,7 @@ import { passwordValidator } from '../../utils/password.validator';
 import { matchPasswordsValidator } from '../../utils/match-passwords.validator';
 import { ErrorMsgComponent } from "../../core/error-msg/error-msg.component";
 import { TermsModalComponent } from "../../shared/terms-modal/terms-modal.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -16,9 +17,11 @@ import { TermsModalComponent } from "../../shared/terms-modal/terms-modal.compon
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy {
   errorMsg: string | undefined = '';
   isModalVisible: boolean = false;
+  private subscriptions: Subscription[] = [];
+  private timeoutIds: ReturnType<typeof setTimeout>[] = [];
 
   constructor(private userService: UserService, private router: Router) { }
 
@@ -74,7 +77,8 @@ export class RegisterComponent {
     username = username?.toLowerCase();
     email = email?.toLowerCase();
 
-    this.userService.register(username!, email!, password!)
+    const registerSub = this.userService
+      .register(username!, email!, password!)
       .subscribe({
         next: (data) => {
           const token = data.accessToken;
@@ -82,15 +86,29 @@ export class RegisterComponent {
           this.router.navigate(['/home']);
         },
         error: (err) => {
-          this.errorMsg = err.error?.message;
-          setTimeout(() => {
-            this.errorMsg = '';
-          }, 2500);
+          if (err.status == 0) {
+            console.error('No response from the server', err);
+            this.router.navigate(['/server-error']);
+          } else {
+            this.errorMsg = err.error?.message;
+            const timeoutId = setTimeout(() => {
+              this.errorMsg = '';
+            }, 2500);
+
+            this.timeoutIds.push(timeoutId);
+          }
         }
       });
+
+    this.subscriptions.push(registerSub);
   }
 
   toggleModal() {
     this.isModalVisible = !this.isModalVisible;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.timeoutIds.forEach(timeout => clearTimeout(timeout));
   }
 }

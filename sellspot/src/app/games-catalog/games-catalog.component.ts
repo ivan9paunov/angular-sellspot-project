@@ -66,16 +66,19 @@ export class GamesCatalogComponent implements OnInit, OnDestroy {
 
   fetchGames(): void {
     this.isLoading = true;
-    const getAllGamesSub = this.apiService.getAllGames(this.show, this.genre, this.searchControl.value, this.collection).subscribe(
-      (games) => {
-        this.games = games;
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Error fetching games:', error);
-        this.isLoading = false;
-      }
-    );
+    const getAllGamesSub = this.apiService
+      .getAllGames(this.show, this.genre, this.searchControl.value, this.collection)
+      .subscribe({
+        next: (games) => {
+          this.games = games;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching games:', error);
+          this.router.navigate(['/server-error']);
+          this.isLoading = false;
+        }
+      });
 
     this.subscriptions.push(getAllGamesSub);
   }

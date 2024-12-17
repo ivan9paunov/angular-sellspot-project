@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Game } from '../types/game';
 import { ApiService } from '../api.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 import { LoaderComponent } from '../shared/loader/loader.component';
 
 @Component({
@@ -13,12 +13,13 @@ import { LoaderComponent } from '../shared/loader/loader.component';
   templateUrl: './games-sold.component.html',
   styleUrl: './games-sold.component.css'
 })
-export class GamesSoldComponent implements OnInit {
+export class GamesSoldComponent implements OnInit, OnDestroy {
   games: Game[] = [];
   collection: string = 'sold';
   isLoading: boolean = true;
   show: string = 'latest';
   genre: string = 'All';
+  private subscriptions: Subscription[] = [];
   searchControl: FormControl = new FormControl();
 
   constructor(
@@ -65,13 +66,21 @@ export class GamesSoldComponent implements OnInit {
 
   fetchGames(): void {
     this.isLoading = true;
-    this.apiService.getAllGames(this.show, this.genre, this.searchControl.value, this.collection).subscribe(games => {
-      this.games = games;
-      this.isLoading = false;
-    }, error => {
-      console.error('Error fetching games:', error);
-      this.isLoading = false;
-    });
+    const getAllGamesSub = this.apiService
+      .getAllGames(this.show, this.genre, this.searchControl.value, this.collection)
+      .subscribe({
+        next: (games) => {
+          this.games = games;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching games:', error);
+          this.router.navigate(['/server-error']);
+          this.isLoading = false;
+        }
+      });
+
+    this.subscriptions.push(getAllGamesSub);
   }
 
   updateQueryParams(): void {
@@ -84,5 +93,9 @@ export class GamesSoldComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     })
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }
