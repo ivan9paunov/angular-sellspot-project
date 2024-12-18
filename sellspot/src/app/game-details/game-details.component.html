@@ -45,7 +45,7 @@
                     </div>
                     @if (showBuy) {
                     <app-buy-modal gameName="{{game.title}}" seller="{{game.user.email}}" (closeModal)="showBuyModal()"
-                        (confirmModal)="onBuy()" />
+                        (confirmModal)="onBuy($event)" />
                     }
                     @if (hasSuccess) {
                     <app-success-modal message="Your request has been sent. Please keep an eye on your inbox." />

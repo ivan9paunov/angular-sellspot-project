@@ -8,14 +8,14 @@
             <div class="main-text">
                 <p>Do you want to buy {{gameName}}?</p>
                 <p>Send your names, phone number and shipping address to {{seller}}</p>
-                <textarea name="personalData" id="personalData"></textarea>
+                <textarea name="personalData" id="personalData" #personalData></textarea>
             </div>
             <div class="action">
                 <div class="action-btn">
                     <button (click)="onClose()" type="button" class="cancel-btn">CANCEL</button>
                 </div>
                 <div class="action-btn">
-                    <button (click)="onConfirm()" type="button" class="confirm-btn">SEND</button>
+                    <button (click)="onConfirm(personalData)" type="button" class="confirm-btn">SEND</button>
                 </div>
             </div>
         </div>

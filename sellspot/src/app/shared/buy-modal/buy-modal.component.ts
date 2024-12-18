@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class BuyModalComponent {
   @Output() closeModal = new EventEmitter<boolean>();
-  @Output() confirmModal = new EventEmitter<boolean>();
+  @Output() confirmModal = new EventEmitter<string>();
   @Input() gameName: string = '';
   @Input() seller: string = '';
 
@@ -17,7 +17,13 @@ export class BuyModalComponent {
     this.closeModal.emit();
   }
 
-  onConfirm() {
-    this.confirmModal.emit();
+  onConfirm(input: HTMLTextAreaElement) {
+    const inputValue = input.value.trim();
+
+    if (!inputValue) {
+      return;
+    }
+
+    this.confirmModal.emit(inputValue);
   }
 }

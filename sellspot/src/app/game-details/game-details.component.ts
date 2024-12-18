@@ -126,7 +126,8 @@ export class GameDetailsComponent implements OnInit, OnDestroy {
     this.showBuy = !this.showBuy;
   }
 
-  onBuy() {
+  onBuy(inputValue: string) {
+    console.log(inputValue);
     this.showBuyModal();
     this.hasSuccess = true;
     this.buySuccessTimeout = setTimeout(() => {

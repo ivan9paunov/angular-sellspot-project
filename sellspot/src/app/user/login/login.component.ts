@@ -81,7 +81,8 @@ export class LoginComponent implements OnDestroy {
     this.showModal = !this.showModal;
   }
 
-  onResetPassword() {
+  onResetPassword(resetEmail: string) {
+    console.log(resetEmail);
     this.showResetPasswordModal();
     this.hasSuccess = true;
     const timeoutId = setTimeout(() => {

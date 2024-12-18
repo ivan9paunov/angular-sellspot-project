@@ -45,7 +45,7 @@
                     @if (showModal) {
                         <app-reset-password-modal 
                             (closeModal)="showResetPasswordModal()"
-                            (confirmModal)="onResetPassword()"
+                            (confirmModal)="onResetPassword($event)"
                         />
                     }
                     @if (hasSuccess) {
