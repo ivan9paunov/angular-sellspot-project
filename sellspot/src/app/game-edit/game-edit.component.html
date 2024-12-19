@@ -20,12 +20,15 @@
                             </div>
 
                             <div class="form-group">
-                                <input [class]="inputMissing('imageUrl') ? 'input-error' : ''" type="url"
-                                    name="imageUrl" id="imageUrl" placeholder="Cover photo link" autocomplete="off"
-                                    formControlName="imageUrl" />
+                                <input [class]="inputMissing('imageUrl') || urlNotValid() ? 'input-error' : ''"
+                                    type="url" name="imageUrl" id="imageUrl" placeholder="Cover photo link"
+                                    autocomplete="off" formControlName="imageUrl" />
                                 @if (form.get('imageUrl')?.touched) {
                                 @if (form.get('imageUrl')?.errors?.['required']) {
                                 <label class="err" for="imageUrl">Image URL is required</label>
+                                }
+                                @if (form.get('imageUrl')?.errors?.['urlValidator']) {
+                                <label class="err" for="imageUrl">Image URL is not valid</label>
                                 }
                                 }
                             </div>

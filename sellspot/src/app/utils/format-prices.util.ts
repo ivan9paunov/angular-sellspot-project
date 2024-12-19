@@ -1,6 +1,8 @@
 export function formatPrice(value: string): string {
-    if (value == '0') {
-        return '0.00'
+    if (Number(value) <= 0) {
+        return '0.00';
+    } else if (Number(value) > 200){
+        return '200.00';
     } else if (!value) {
         return '';
     }

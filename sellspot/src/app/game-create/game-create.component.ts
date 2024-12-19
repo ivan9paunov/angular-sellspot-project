@@ -6,6 +6,7 @@ import { formatPrice } from '../utils/format-prices.util';
 import { UserService } from '../user/user.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { urlValidator } from '../utils/url.validator';
 
 @Component({
   selector: 'app-game-create',
@@ -32,7 +33,7 @@ export class GameCreateComponent implements OnDestroy {
   ) {
     this.form = new FormGroup({
       title: new FormControl('', [Validators.required]),
-      imageUrl: new FormControl('', [Validators.required]),
+      imageUrl: new FormControl('', [Validators.required, urlValidator()]),
       platform: new FormControl('', [Validators.required]),
       price: new FormControl('', [Validators.required]),
       condition: new FormControl('', [Validators.required]),
@@ -48,6 +49,13 @@ export class GameCreateComponent implements OnDestroy {
     return (
       this.form.get(controlName)?.touched &&
       this.form.get(controlName)?.errors?.['required']
+    );
+  }
+
+  urlNotValid() {
+    return (
+      this.form.get('imageUrl')?.touched &&
+      this.form.get('imageUrl')?.errors?.['urlValidator']
     );
   }
 

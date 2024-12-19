@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../user/user.service';
 import { Subscription } from 'rxjs';
 import { LoaderComponent } from "../shared/loader/loader.component";
+import { urlValidator } from '../utils/url.validator';
 
 @Component({
   selector: 'app-game-edit',
@@ -39,7 +40,7 @@ export class GameEditComponent implements OnInit, OnDestroy {
   ) {
     this.form = new FormGroup({
       title: new FormControl('', [Validators.required]),
-      imageUrl: new FormControl('', [Validators.required]),
+      imageUrl: new FormControl('', [Validators.required, urlValidator()]),
       platform: new FormControl('', [Validators.required]),
       price: new FormControl('', [Validators.required]),
       condition: new FormControl('', [Validators.required]),
@@ -94,6 +95,13 @@ export class GameEditComponent implements OnInit, OnDestroy {
     return (
       this.form.get(controlName)?.touched &&
       this.form.get(controlName)?.errors?.['required']
+    );
+  }
+
+  urlNotValid() {
+    return (
+      this.form.get('imageUrl')?.touched &&
+      this.form.get('imageUrl')?.errors?.['urlValidator']
     );
   }
 
